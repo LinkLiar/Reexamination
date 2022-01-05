@@ -1,7 +1,7 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
-#include<iostream>
-#include<vector>
-#include<map>
+#include <iostream>
+#include <vector>
+#include <map>
 #include <iomanip>
 using namespace std;
 
@@ -12,8 +12,7 @@ vector<pair<int, pair<int, int> > > GetLongCommonSubstring(const vector<vector<i
 	vector<pair<int, pair<int, int> > > maxLocation;
 	if (dp.size() < 1 || dp[0].size() < 1 || tlPoint.first < -1 || tlPoint.second < -1 || brPoint.first >= dp.size() || brPoint.second >= dp[0].size())
 	{
-		maxLocation.push_back(make_pair(0, make_pair(0, 0)));
-		return maxLocation;
+		return {};
 	}
 
 	for (int i = brPoint.first; i >= tlPoint.first; i--)
@@ -56,24 +55,24 @@ vector<pair<int, pair<int, int> > > GetLongCommonSubstring(const vector<vector<i
 	return maxLocation;
 }
 
-vector<int> GetMatchingString(vector<vector<int> > dp, pair<int, int> tlPoint, pair<int, int> brPoint)
+vector<pair<int, int>> GetMatchingString(vector<vector<int> > dp, pair<int, int> tlPoint, pair<int, int> brPoint)
 {
-	if (tlPoint.first > brPoint.first || tlPoint.second > brPoint.second ||tlPoint.first < -1 || tlPoint.second < -1 || brPoint.first >= dp.size() || brPoint.second >= dp[0].size())
+	if (tlPoint.first > brPoint.first || tlPoint.second > brPoint.second || tlPoint.first < -1 || tlPoint.second < -1 || brPoint.first >= dp.size() || brPoint.second >= dp[0].size())
 		return {};
 	vector<pair<int, pair<int, int> > >dpLength = GetLongCommonSubstring(dp, tlPoint, brPoint);
-	if (dpLength.empty()||dpLength[0].first == 0)
+	if (dpLength.empty())
 		return {};
 	int maxMatchTime = 0;
 	int maxID = -1;
-	vector<int>result;
-	vector<int>tempResult;
-	vector<int>maxTLArea;
-	vector<int>maxBRArea;
+	vector<pair<int, int> >result;
+	vector<pair<int, int> >tempResult;
+	vector<pair<int, int> >maxTLArea;
+	vector<pair<int, int> >maxBRArea;
 
-	for (int i = 0; i < dpLength.size() ; i++)
+	for (int i = 0; i < dpLength.size(); i++)
 	{
-		vector<int>tlArea = GetMatchingString(dp, tlPoint, make_pair(dpLength[i].second.first - dpLength[i].first, dpLength[i].second.second - dpLength[i].first));
-		vector<int>brArea = GetMatchingString(dp, make_pair(dpLength[i].second.first + 1, dpLength[i].second.second + 1), brPoint);
+		vector<pair<int, int> >tlArea = GetMatchingString(dp, tlPoint, make_pair(dpLength[i].second.first - dpLength[i].first, dpLength[i].second.second - dpLength[i].first));
+		vector<pair<int, int> >brArea = GetMatchingString(dp, make_pair(dpLength[i].second.first + 1, dpLength[i].second.second + 1), brPoint);
 		if (tlArea.size() + brArea.size() > maxMatchTime)
 		{
 			maxMatchTime = tlArea.size() + brArea.size();
@@ -85,18 +84,18 @@ vector<int> GetMatchingString(vector<vector<int> > dp, pair<int, int> tlPoint, p
 	if (maxID != -1)
 	{
 		for (int i = dpLength[maxID].first; i > 0; i--)
-			tempResult.push_back(dpLength[maxID].second.first - i + 1);
+			tempResult.push_back(make_pair(dpLength[maxID].second.first - i + 1, dpLength[maxID].second.second - i + 1));
 		tempResult.insert(tempResult.begin(), maxTLArea.begin(), maxTLArea.end());
 		tempResult.insert(tempResult.end(), maxBRArea.begin(), maxBRArea.end());
 		return tempResult;
 	}
 	for (int i = dpLength[0].first; i > 0; i--)
-		tempResult.push_back(dpLength[0].second.first - i + 1);
+		tempResult.push_back(make_pair(dpLength[0].second.first - i + 1, dpLength[0].second.second - i + 1));
 	return tempResult;
 
 }
 
-char* GetCommonString(char* str1, char* str2) 
+char* GetCommonString(char* str1, char* str2)
 {
 	if (str1 == NULL || str2 == NULL) {
 		return NULL;
@@ -125,7 +124,7 @@ char* GetCommonString(char* str1, char* str2)
 	}
 	cout << "\n";
 	for (int i = 0; i < shortLength; i++)
-	{	
+	{
 		cout << setw(3) << setiosflags(ios::left) << strShort[i];
 		for (int j = 0; j < longLength; j++)
 		{
@@ -199,7 +198,7 @@ char* GetCommonString(char* str1, char* str2)
 
 	//vector<pair<int, pair<int, int> > >dpLength = GetLongCommonSubstring(dp, make_pair(0, 0), make_pair(stringLen1 - 1, stringLen2 - 1));
 
-	vector<int>result = GetMatchingString(dp, make_pair(0, 0), make_pair(shortLength - 1, longLength - 1));
+	vector<pair<int, int> >result = GetMatchingString(dp, make_pair(0, 0), make_pair(shortLength - 1, longLength - 1));
 	//cout << "\n";
 	//for (int i = 0; i < stringLen1; i++)
 	//{
@@ -209,7 +208,16 @@ char* GetCommonString(char* str1, char* str2)
 	//	}
 	//	cout << "\n";
 	//}
-
+	cout << "StringOne: ";
+	for (int j = 0; j < longLength; j++)
+	{
+		cout << setw(3) << setiosflags(ios::left) << strLong[j];
+	}
+	cout << "\n" << "StringTwo: ";
+	for (int j = 0; j < shortLength; j++)
+	{
+		cout << setw(3) << setiosflags(ios::left) << strShort[j];
+	}
 
 
 	return NULL;
@@ -223,10 +231,7 @@ bool isCountinueFindString(char* str1, char* str2)
 	return 1;
 }
 
-
-
-
-int main() 
+int main()
 {
 	//char str1[50]="abcmabcd";
 	//char str2[50]="abcdabc";
