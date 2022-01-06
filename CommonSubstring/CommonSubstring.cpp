@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <iomanip>
+#include <algorithm>
 using namespace std;
 
 vector<pair<int, pair<int, int> > > GetLongCommonSubstring(const vector<vector<int> > dp, pair<int, int> tlPoint, pair<int, int> brPoint)
@@ -64,7 +65,7 @@ vector<pair<int, int>> GetMatchingString(vector<vector<int> > dp, pair<int, int>
 		return {};
 	int maxMatchTime = 0;
 	int maxID = -1;
-	vector<pair<int, int> >result;
+	vector<int>isCountinueSearch;
 	vector<pair<int, int> >tempResult;
 	vector<pair<int, int> >maxTLArea;
 	vector<pair<int, int> >maxBRArea;
@@ -80,6 +81,7 @@ vector<pair<int, int>> GetMatchingString(vector<vector<int> > dp, pair<int, int>
 			maxTLArea = tlArea;
 			maxBRArea = brArea;
 		}
+
 	}
 	if (maxID != -1)
 	{
@@ -87,11 +89,34 @@ vector<pair<int, int>> GetMatchingString(vector<vector<int> > dp, pair<int, int>
 			tempResult.push_back(make_pair(dpLength[maxID].second.first - i + 1, dpLength[maxID].second.second - i + 1));
 		tempResult.insert(tempResult.begin(), maxTLArea.begin(), maxTLArea.end());
 		tempResult.insert(tempResult.end(), maxBRArea.begin(), maxBRArea.end());
-		return tempResult;
+
+		int leftArea = min(dpLength[maxID].second.second - dpLength[maxID].first + 1 - tlPoint.second, dpLength[maxID].first);
+		int buttomArea = min(brPoint.first - dpLength[maxID].second.first+1 , dpLength[maxID].first);
+		int rightArea = min(brPoint.second - dpLength[maxID].second.second +1, dpLength[maxID].first);
+		int upArea = min(brPoint.second - dpLength[maxID].second.second + 1, dpLength[maxID].first);
+
+
+		if (tempResult.size() < (leftArea + buttomArea) || tempResult.size() < (upArea + rightArea))
+			printf("unsolve");
+		else
+			return tempResult;
 	}
-	for (int i = dpLength[0].first; i > 0; i--)
-		tempResult.push_back(make_pair(dpLength[0].second.first - i + 1, dpLength[0].second.second - i + 1));
-	return tempResult;
+	else
+	{
+		for (int i = dpLength[0].first; i > 0; i--)
+			tempResult.push_back(make_pair(dpLength[0].second.first - i + 1, dpLength[0].second.second - i + 1));
+		int leftArea = min(dpLength[0].second.second - dpLength[0].first + 1 - tlPoint.second, dpLength[0].first);
+		int buttomArea = min(brPoint.first - dpLength[0].second.first + 1, dpLength[0].first);
+		int rightArea = min(brPoint.second - dpLength[0].second.second + 1, dpLength[0].first);
+		int upArea = min(brPoint.second - dpLength[0].second.second + 1, dpLength[0].first);
+
+
+		if (tempResult.size() < (leftArea + buttomArea) || tempResult.size() < (upArea + rightArea))
+			printf("unsolve\n");
+		else
+			return tempResult;
+	}
+
 
 }
 
@@ -226,17 +251,17 @@ char* GetCommonString(char* str1, char* str2)
 
 
 
-bool isCountinueFindString(char* str1, char* str2)
+bool isCountinueSearch(char* str1, char* str2)
 {
 	return 1;
 }
 
 int main()
 {
-	//char str1[50]="abcmabcd";
-	//char str2[50]="abcdabc";
-	char str1[50] = "abcdabcbdeabckk";
-	char str2[50] = "kkabceabcdecabc";
+	char str1[50]="abcmabcd";
+	char str2[50]="abcdabc";
+	//char str1[50] = "abcdabcbdeabckk";
+	//char str2[50] = "kkabceabcdecabc";
 	//cout << "Please input the first string:";
 	//cin >> str1;
 	//cout << "Please input the second string:";

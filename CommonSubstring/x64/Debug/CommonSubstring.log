@@ -1,5 +1,6 @@
 ﻿  CommonSubstring.cpp
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CommonSubstring.cpp(78,48): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CommonSubstring.cpp(103,31): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CommonSubstring.cpp(104,31): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CommonSubstring.cpp(79,48): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CommonSubstring.cpp(128,31): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CommonSubstring.cpp(129,31): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CommonSubstring.cpp(121): warning C4715: 'GetMatchingString': not all control paths return a value
   CommonSubstring.vcxproj -> C:\Users\Link\source\repos\CommonSubstring\x64\Debug\CommonSubstring.exe
