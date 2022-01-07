@@ -90,14 +90,57 @@ vector<pair<int, int>> GetMatchingString(vector<vector<int> > dp, pair<int, int>
 		tempResult.insert(tempResult.begin(), maxTLArea.begin(), maxTLArea.end());
 		tempResult.insert(tempResult.end(), maxBRArea.begin(), maxBRArea.end());
 
-		int leftArea = min(dpLength[maxID].second.second - dpLength[maxID].first + 1 - tlPoint.second, dpLength[maxID].first);
-		int buttomArea = min(brPoint.first - dpLength[maxID].second.first+1 , dpLength[maxID].first);
-		int rightArea = min(brPoint.second - dpLength[maxID].second.second +1, dpLength[maxID].first);
-		int upArea = min(brPoint.second - dpLength[maxID].second.second + 1, dpLength[maxID].first);
+		int leftAreaMin = min(dpLength[maxID].second.second - dpLength[maxID].first + 1 - tlPoint.second, dpLength[maxID].first);
+		int buttomAreaMin = min(brPoint.first - dpLength[maxID].second.first, dpLength[maxID].first);
+		int rightAreaMin = min(brPoint.second - dpLength[maxID].second.second, dpLength[maxID].first);
+		int upAreaMin = min(dpLength[maxID].second.first - tlPoint.first - dpLength[maxID].first + 1, dpLength[maxID].first);
 
 
-		if (tempResult.size() < (leftArea + buttomArea) || tempResult.size() < (upArea + rightArea))
-			printf("unsolve");
+		if (tempResult.size()!=1&&(tempResult.size() < (leftAreaMin + buttomAreaMin+2) || tempResult.size() < (upAreaMin + rightAreaMin+2)))
+	/*		printf("unsolve\n");*/
+		{
+			vector<pair<int, int> >leftArea = GetMatchingString(dp, make_pair(dpLength[maxID].second.first - dpLength[maxID].first+1, tlPoint.second), make_pair(dpLength[maxID].second.first, dpLength[maxID].second.second - dpLength[maxID].first));
+			vector<pair<int, int> >buttomArea = GetMatchingString(dp, make_pair(dpLength[maxID].second.first, dpLength[maxID].second.second - dpLength[maxID].first + 1), make_pair(brPoint.first, dpLength[maxID].second.second));
+
+			vector<pair<int, int> >upArea = GetMatchingString(dp, make_pair(tlPoint.first, dpLength[maxID].second.second - dpLength[maxID].first + 1), make_pair(dpLength[maxID].second.first - dpLength[maxID].first + 1, dpLength[maxID].second.second));
+			vector<pair<int, int> >rightArea = GetMatchingString(dp, make_pair(dpLength[maxID].second.first - dpLength[maxID].first + 1, dpLength[maxID].second.second), make_pair(dpLength[maxID].second.first,brPoint.second));
+			
+			int lbAreaLength = tempResult.size();
+			int urAreaLength = lbAreaLength;
+			if (leftArea.size() != 0 && buttomArea.size() != 0&& (leftArea.size()+ buttomArea.size())> tempResult.size())
+			{
+				if (leftArea[leftArea.size() - 1].first == buttomArea[0].first || leftArea[leftArea.size() - 1].second == buttomArea[0].second)
+				{
+					if (leftArea.size() >= buttomArea.size())
+						buttomArea.erase(buttomArea.begin());
+					else
+						leftArea.pop_back();
+					lbAreaLength = leftArea.size() + buttomArea.size() - 1;
+				}
+				if (upArea[upArea.size() - 1].first == rightArea[0].first || upArea[upArea.size() - 1].second == rightArea[0].second)
+				{
+					if (upArea.size() >= rightArea.size())
+						rightArea.erase(rightArea.begin());
+					else
+						upArea.pop_back();
+					urAreaLength = upArea.size() + rightArea.size() - 1;
+				}
+
+				if (lbAreaLength > urAreaLength && urAreaLength != tempResult.size())
+				{
+					tempResult.clear();
+					tempResult.insert(tempResult.end(), leftArea.begin(), leftArea.end());
+					tempResult.insert(tempResult.end(), buttomArea.begin(), buttomArea.end());
+				}
+				else if (lbAreaLength < urAreaLength && lbAreaLength != tempResult.size())
+				{
+					tempResult.clear();
+					tempResult.insert(tempResult.end(), leftArea.begin(), leftArea.end());
+					tempResult.insert(tempResult.end(), buttomArea.begin(), buttomArea.end());
+				}
+			}
+			return tempResult;
+		}
 		else
 			return tempResult;
 	}
@@ -105,14 +148,57 @@ vector<pair<int, int>> GetMatchingString(vector<vector<int> > dp, pair<int, int>
 	{
 		for (int i = dpLength[0].first; i > 0; i--)
 			tempResult.push_back(make_pair(dpLength[0].second.first - i + 1, dpLength[0].second.second - i + 1));
-		int leftArea = min(dpLength[0].second.second - dpLength[0].first + 1 - tlPoint.second, dpLength[0].first);
-		int buttomArea = min(brPoint.first - dpLength[0].second.first + 1, dpLength[0].first);
-		int rightArea = min(brPoint.second - dpLength[0].second.second + 1, dpLength[0].first);
-		int upArea = min(brPoint.second - dpLength[0].second.second + 1, dpLength[0].first);
+		int leftAreaMin = min(dpLength[0].second.second - dpLength[0].first + 1 - tlPoint.second, dpLength[0].first);
+		int buttomAreaMin = min(brPoint.first - dpLength[0].second.first, dpLength[0].first);
+		int rightAreaMin = min(brPoint.second - dpLength[0].second.second, dpLength[0].first);
+		int upAreaMin = min(dpLength[0].second.first - tlPoint.first - dpLength[0].first + 1, dpLength[0].first);
 
 
-		if (tempResult.size() < (leftArea + buttomArea) || tempResult.size() < (upArea + rightArea))
-			printf("unsolve\n");
+		if (tempResult.size()!=1&&(tempResult.size() < (leftAreaMin + buttomAreaMin+2) || tempResult.size() < (upAreaMin + rightAreaMin+2)))
+	/*		printf("unsolve\n");*/
+		{
+			vector<pair<int, int> >leftArea = GetMatchingString(dp, make_pair(dpLength[0].second.first - dpLength[0].first+1, tlPoint.second), make_pair(dpLength[0].second.first, dpLength[0].second.second - dpLength[0].first));
+			vector<pair<int, int> >buttomArea = GetMatchingString(dp, make_pair(dpLength[0].second.first, dpLength[0].second.second - dpLength[0].first + 1), make_pair(brPoint.first, dpLength[0].second.second));
+
+			vector<pair<int, int> >upArea = GetMatchingString(dp, make_pair(tlPoint.first, dpLength[0].second.second - dpLength[0].first + 1), make_pair(dpLength[0].second.first - dpLength[0].first + 1, dpLength[0].second.second));
+			vector<pair<int, int> >rightArea = GetMatchingString(dp, make_pair(dpLength[0].second.first - dpLength[0].first + 1, dpLength[0].second.second), make_pair(dpLength[0].second.first,brPoint.second));
+			
+			int lbAreaLength = tempResult.size();
+			int urAreaLength = lbAreaLength;
+			if (leftArea.size() != 0 && buttomArea.size() != 0&& (leftArea.size()+ buttomArea.size())> tempResult.size())
+			{
+				if (leftArea[leftArea.size() - 1].first == buttomArea[0].first || leftArea[leftArea.size() - 1].second == buttomArea[0].second)
+				{
+					if (leftArea.size() >= buttomArea.size())
+						buttomArea.erase(buttomArea.begin());
+					else
+						leftArea.pop_back();
+					lbAreaLength = leftArea.size() + buttomArea.size() - 1;
+				}
+				if (upArea[upArea.size() - 1].first == rightArea[0].first || upArea[upArea.size() - 1].second == rightArea[0].second)
+				{
+					if (upArea.size() >= rightArea.size())
+						rightArea.erase(rightArea.begin());
+					else
+						upArea.pop_back();
+					urAreaLength = upArea.size() + rightArea.size() - 1;
+				}
+
+				if (lbAreaLength > urAreaLength && urAreaLength != tempResult.size())
+				{
+					tempResult.clear();
+					tempResult.insert(tempResult.end(), leftArea.begin(), leftArea.end());
+					tempResult.insert(tempResult.end(), buttomArea.begin(), buttomArea.end());
+				}
+				else if (lbAreaLength < urAreaLength && lbAreaLength != tempResult.size())
+				{
+					tempResult.clear();
+					tempResult.insert(tempResult.end(), leftArea.begin(), leftArea.end());
+					tempResult.insert(tempResult.end(), buttomArea.begin(), buttomArea.end());
+				}
+			}
+			return tempResult;
+		}
 		else
 			return tempResult;
 	}
@@ -258,10 +344,14 @@ bool isCountinueSearch(char* str1, char* str2)
 
 int main()
 {
-	char str1[50]="abcmabcd";
-	char str2[50]="abcdabc";
+	//char str1[50]="abcnabcd";
+	//char str2[50]="abcdbcd";
 	//char str1[50] = "abcdabcbdeabckk";
 	//char str2[50] = "kkabceabcdecabc";
+	//char str1[50] = "bcddfgfhijk";
+	//char str2[50] = "abcdgfgihij";
+	char str1[50] = "aaaaaaaa";
+	char str2[50] = "aaaaaaa";
 	//cout << "Please input the first string:";
 	//cin >> str1;
 	//cout << "Please input the second string:";
