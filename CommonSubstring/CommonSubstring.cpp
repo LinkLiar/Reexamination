@@ -96,18 +96,18 @@ vector<pair<int, int>> GetMatchingString(vector<vector<int> > dp, pair<int, int>
 		int upAreaMin = min(dpLength[maxID].second.first - tlPoint.first - dpLength[maxID].first + 1, dpLength[maxID].first);
 
 
-		if (tempResult.size()!=1&&(tempResult.size() < (leftAreaMin + buttomAreaMin+2) || tempResult.size() < (upAreaMin + rightAreaMin+2)))
-	/*		printf("unsolve\n");*/
+		if (tempResult.size() != 1 && (tempResult.size() < (leftAreaMin + buttomAreaMin + 2) || tempResult.size() < (upAreaMin + rightAreaMin + 2)))
+			/*		printf("unsolve\n");*/
 		{
-			vector<pair<int, int> >leftArea = GetMatchingString(dp, make_pair(dpLength[maxID].second.first - dpLength[maxID].first+1, tlPoint.second), make_pair(dpLength[maxID].second.first, dpLength[maxID].second.second - dpLength[maxID].first));
+			vector<pair<int, int> >leftArea = GetMatchingString(dp, make_pair(dpLength[maxID].second.first - dpLength[maxID].first + 1, tlPoint.second), make_pair(dpLength[maxID].second.first, dpLength[maxID].second.second - dpLength[maxID].first));
 			vector<pair<int, int> >buttomArea = GetMatchingString(dp, make_pair(dpLength[maxID].second.first, dpLength[maxID].second.second - dpLength[maxID].first + 1), make_pair(brPoint.first, dpLength[maxID].second.second));
 
 			vector<pair<int, int> >upArea = GetMatchingString(dp, make_pair(tlPoint.first, dpLength[maxID].second.second - dpLength[maxID].first + 1), make_pair(dpLength[maxID].second.first - dpLength[maxID].first + 1, dpLength[maxID].second.second));
-			vector<pair<int, int> >rightArea = GetMatchingString(dp, make_pair(dpLength[maxID].second.first - dpLength[maxID].first + 1, dpLength[maxID].second.second), make_pair(dpLength[maxID].second.first,brPoint.second));
-			
+			vector<pair<int, int> >rightArea = GetMatchingString(dp, make_pair(dpLength[maxID].second.first - dpLength[maxID].first + 1, dpLength[maxID].second.second), make_pair(dpLength[maxID].second.first, brPoint.second));
+
 			int lbAreaLength = tempResult.size();
 			int urAreaLength = lbAreaLength;
-			if (leftArea.size() != 0 && buttomArea.size() != 0&& (leftArea.size()+ buttomArea.size())> tempResult.size())
+			if (leftArea.size() != 0 && buttomArea.size() != 0 && (leftArea.size() + buttomArea.size()) > tempResult.size())
 			{
 				if (leftArea[leftArea.size() - 1].first == buttomArea[0].first || leftArea[leftArea.size() - 1].second == buttomArea[0].second)
 				{
@@ -132,7 +132,7 @@ vector<pair<int, int>> GetMatchingString(vector<vector<int> > dp, pair<int, int>
 					tempResult.insert(tempResult.end(), leftArea.begin(), leftArea.end());
 					tempResult.insert(tempResult.end(), buttomArea.begin(), buttomArea.end());
 				}
-				else if (lbAreaLength < urAreaLength && lbAreaLength != tempResult.size())
+				else if (lbAreaLength < urAreaLength&& lbAreaLength != tempResult.size())
 				{
 					tempResult.clear();
 					tempResult.insert(tempResult.end(), leftArea.begin(), leftArea.end());
@@ -154,18 +154,18 @@ vector<pair<int, int>> GetMatchingString(vector<vector<int> > dp, pair<int, int>
 		int upAreaMin = min(dpLength[0].second.first - tlPoint.first - dpLength[0].first + 1, dpLength[0].first);
 
 
-		if (tempResult.size()!=1&&(tempResult.size() < (leftAreaMin + buttomAreaMin+2) || tempResult.size() < (upAreaMin + rightAreaMin+2)))
-	/*		printf("unsolve\n");*/
+		if (tempResult.size() != 1 && (tempResult.size() < (leftAreaMin + buttomAreaMin + 2) || tempResult.size() < (upAreaMin + rightAreaMin + 2)))
+			/*		printf("unsolve\n");*/
 		{
-			vector<pair<int, int> >leftArea = GetMatchingString(dp, make_pair(dpLength[0].second.first - dpLength[0].first+1, tlPoint.second), make_pair(dpLength[0].second.first, dpLength[0].second.second - dpLength[0].first));
+			vector<pair<int, int> >leftArea = GetMatchingString(dp, make_pair(dpLength[0].second.first - dpLength[0].first + 1, tlPoint.second), make_pair(dpLength[0].second.first, dpLength[0].second.second - dpLength[0].first));
 			vector<pair<int, int> >buttomArea = GetMatchingString(dp, make_pair(dpLength[0].second.first, dpLength[0].second.second - dpLength[0].first + 1), make_pair(brPoint.first, dpLength[0].second.second));
 
 			vector<pair<int, int> >upArea = GetMatchingString(dp, make_pair(tlPoint.first, dpLength[0].second.second - dpLength[0].first + 1), make_pair(dpLength[0].second.first - dpLength[0].first + 1, dpLength[0].second.second));
-			vector<pair<int, int> >rightArea = GetMatchingString(dp, make_pair(dpLength[0].second.first - dpLength[0].first + 1, dpLength[0].second.second), make_pair(dpLength[0].second.first,brPoint.second));
-			
+			vector<pair<int, int> >rightArea = GetMatchingString(dp, make_pair(dpLength[0].second.first - dpLength[0].first + 1, dpLength[0].second.second), make_pair(dpLength[0].second.first, brPoint.second));
+
 			int lbAreaLength = tempResult.size();
 			int urAreaLength = lbAreaLength;
-			if (leftArea.size() != 0 && buttomArea.size() != 0&& (leftArea.size()+ buttomArea.size())> tempResult.size())
+			if (leftArea.size() != 0 && buttomArea.size() != 0 && (leftArea.size() + buttomArea.size()) > tempResult.size())
 			{
 				if (leftArea[leftArea.size() - 1].first == buttomArea[0].first || leftArea[leftArea.size() - 1].second == buttomArea[0].second)
 				{
@@ -217,7 +217,7 @@ char* GetCommonString(char* str1, char* str2)
 	char* strShort = str2;
 	int longLength = stringLen1;
 	int shortLength = stringLen2;
-	if (stringLen2 > stringLen1)
+	if (stringLen2 > stringLen1)    // 将短字符串放到字符串2
 	{
 		strLong = str2;
 		strShort = str1;
@@ -225,7 +225,6 @@ char* GetCommonString(char* str1, char* str2)
 		shortLength = stringLen1;
 	}
 	//寻找两个字符串中的公共子串
-	//vector<vector<int> > result;
 	vector<vector<int> > dp(shortLength, vector<int>(longLength, 0));
 	cout << "   ";
 
@@ -307,8 +306,6 @@ char* GetCommonString(char* str1, char* str2)
 	//	}
 	//}
 
-	//vector<pair<int, pair<int, int> > >dpLength = GetLongCommonSubstring(dp, make_pair(0, 0), make_pair(stringLen1 - 1, stringLen2 - 1));
-
 	vector<pair<int, int> >result = GetMatchingString(dp, make_pair(0, 0), make_pair(shortLength - 1, longLength - 1));
 	//cout << "\n";
 	//for (int i = 0; i < stringLen1; i++)
@@ -329,8 +326,6 @@ char* GetCommonString(char* str1, char* str2)
 	{
 		cout << setw(3) << setiosflags(ios::left) << strShort[j];
 	}
-
-
 	return NULL;
 }
 
@@ -350,8 +345,8 @@ int main()
 	//char str2[50] = "kkabceabcdecabc";
 	//char str1[50] = "bcddfgfhijk";
 	//char str2[50] = "abcdgfgihij";
-	char str1[50] = "aaaaaaaa";
-	char str2[50] = "aaaaaaa";
+	char str1[50] = "abcdfgfgfgfg";
+	char str2[50] = "abcdgfgfgfgf";
 	//cout << "Please input the first string:";
 	//cin >> str1;
 	//cout << "Please input the second string:";
