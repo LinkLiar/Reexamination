@@ -139,7 +139,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CommonSubstring.cpp" />
+    <ClCompile Include="SearchCommonSubstring.cpp" />
+    <ClCompile Include="GrowCommonSubstring.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

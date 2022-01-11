@@ -15,7 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CommonSubstring.cpp">
+    <ClCompile Include="SearchCommonSubstring.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GrowCommonSubstring.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

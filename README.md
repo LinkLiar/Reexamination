@@ -4,4 +4,6 @@ Preparing For Reexamination
 - [ ] Common substring union
 - [ ] Vector Note
 - [ ] Pair Note
+- [ ] String Note
+- [ ] C++11 std::chrono
 - [ ] Leetcode
