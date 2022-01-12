@@ -1,5 +1,4 @@
 ﻿  GrowCommonSubstring.cpp
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\GrowCommonSubstring.cpp(69,31): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\GrowCommonSubstring.cpp(70,31): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\GrowCommonSubstring.cpp(61): warning C4715: 'GetMatchingString': not all control paths return a value
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\GrowCommonSubstring.cpp(192,31): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\GrowCommonSubstring.cpp(193,31): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
   CommonSubstring.vcxproj -> C:\Users\Link\source\repos\CommonSubstring\x64\Debug\CommonSubstring.exe
