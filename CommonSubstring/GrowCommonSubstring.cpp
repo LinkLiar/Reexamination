@@ -15,17 +15,18 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 	vector<pair<int, int> >result;
 	int pointX = tlPoint.first;
 	int pointY = tlPoint.second;
-	int missCount = 0;
+	int missCount = 1;
 	while (true)
 	{
 		if (dp[pointX][pointY])
-		{
+		{	
+			missCount = 1;
 			result.push_back(make_pair(pointX, pointY));
 			int probeX = tlPoint.first + 1;
 			int probeY = tlPoint.second + 1;
 			int probeLength = 1;
 
-			if (probeX < cols && probeY < rows && dp[probeX][probeY])
+			if (probeX < rows && probeY < cols && dp[probeX][probeY])
 			{
 				while (dp[probeX][probeY])
 				{
@@ -34,7 +35,7 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 					probeX++;
 					probeY++;
 				}
-				if (!(probeX < cols && probeY < rows))
+				if (!(probeX < rows && probeY < cols))
 					break;
 				pointX = probeX;
 				pointY = probeY;
@@ -45,7 +46,7 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 			int probeX = pointX + 1;
 			int probeY = pointY + 1;
 			int probeLength = 0;
-			while (probeX < cols && probeY < rows && dp[probeX][probeY])
+			while (probeX < rows && probeY < cols && dp[probeX][probeY])
 			{
 				probeLength++;
 				probeX++;
@@ -54,7 +55,7 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 			int bottomLength = 0;
 			int bottomprobeX = pointX + 1;
 			int bottomprobeY = pointY;
-			while (bottomprobeX < cols && bottomprobeY < rows && dp[bottomprobeX][bottomprobeY])
+			while (bottomprobeX < rows && bottomprobeY < cols && dp[bottomprobeX][bottomprobeY])
 			{
 				bottomLength++;
 				bottomprobeX++;
@@ -63,7 +64,7 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 			int rightLength = 0;
 			int rightprobeX = pointX;
 			int rightprobeY = pointY + 1;
-			while (rightprobeX < cols && rightprobeY < rows && dp[rightprobeX][rightprobeY])
+			while (rightprobeX < rows && rightprobeY < cols && dp[rightprobeX][rightprobeY])
 			{
 				rightLength++;
 				rightprobeX++;
@@ -72,13 +73,14 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 			bool breakFlag = 0;
 			if (probeLength != 0 || bottomLength != rightLength)
 			{
+				missCount = 1;
 				if (probeLength >= bottomLength)
 				{
 					if (probeLength >= rightLength)
 					{
 						int i = probeX - probeLength;
 						int j = probeY - probeLength;
-						if (!(probeX < cols && probeY < rows))
+						if (!(probeX < rows && probeY < cols))
 						{
 							breakFlag = 1;
 
@@ -92,7 +94,7 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 					{
 						int i = rightprobeX - rightLength;
 						int j = rightprobeY - rightLength;
-						if (!(rightprobeX < cols && rightprobeY < rows))
+						if (!(rightprobeX < rows && rightprobeY < cols))
 						{
 							breakFlag = 1;
 							rightLength++;
@@ -110,7 +112,7 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 					{
 						int i = bottomprobeX - bottomLength;
 						int j = bottomprobeY - bottomLength;
-						if (!(bottomprobeX < cols && bottomprobeY < rows))
+						if (!(bottomprobeX < rows && bottomprobeY < cols))
 						{
 							breakFlag = 1;
 						}
@@ -123,7 +125,7 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 					{
 						int i = rightprobeX - rightLength;
 						int j = rightprobeY - rightLength;
-						if (!(rightprobeX < cols && rightprobeY < rows))
+						if (!(rightprobeX < rows && rightprobeY < cols))
 						{
 							breakFlag = 1;
 							rightLength++;
@@ -139,6 +141,7 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 			}
 			else if (bottomLength == rightLength && rightLength != 0)
 			{
+				missCount = 1;
 				if (bottomLength > min(dp.size() / 3, dp[0].size() / 3))
 				{
 					int i, j;
@@ -158,7 +161,7 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 					}
 
 
-					if (!(rightprobeX < cols && rightprobeY < rows))
+					if (!(rightprobeX < rows && rightprobeY < cols))
 					{
 						breakFlag = 1;
 						rightLength++;
@@ -175,16 +178,69 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 			}
 			else
 			{
-				pointX += 1;
-				pointY += 1;
-				//if (!(probeX < cols && probeY < rows))
-				//	break;
-				//if (dp[pointX][pointY] || dp[pointX - 1][pointY] || dp[pointX][pointY - 1])
-				//	continue;
-				//else
-				//{
+				if (!(probeX+1 < rows && probeY+1 < cols))
+					break;
+				if (dp[pointX + 1][pointY + 1] || dp[pointX + 1][pointY] || dp[pointX][pointY + 1])
+				{
+					pointX += 1;
+					pointY += 1;
+				}
+				else
+				{	
+					missCount++;
+					if (missCount > min(brPoint.first - tlPoint.first, brPoint.second - tlPoint.second) / 2)
+						return {};
+					if(!(probeX + missCount < rows && probeY + missCount < cols))
+						break;
+					int bottomMax = 0;
+					int bottomMaxID = 0;
+					int rightMax = 0;
+					int rightMaxID = 0;
+					for (int i = 0; i < missCount; i++)
+					{
+						if (dp[pointX + missCount][pointY + i])
+						{	
+							int tempLength = 1;
+							while (pointX + missCount+ tempLength < rows && pointY + i+ tempLength < cols && dp[pointX + missCount + tempLength][pointY + i + tempLength])
+								tempLength++;
+							if (bottomMax < tempLength)
+							{
+								bottomMax = tempLength;
+								bottomMaxID = pointY + i ;
+							}
+						}
 
-				//}
+					}
+					for (int i = 0; i < missCount; i++)
+					{
+						if (dp[pointY + i][pointX + missCount])
+						{
+							int tempLength = 1;
+							while (pointX +i+ tempLength < rows && pointY + missCount + tempLength < cols && dp[pointX + i + tempLength][pointY + missCount + tempLength])
+								tempLength++;
+							if (rightMax < tempLength)
+							{
+								rightMax = tempLength;
+								rightMaxID = pointX + i ;
+							}
+						}
+					}
+					if (rightMax == bottomMax && bottomMax == 0)
+						continue;
+					else
+					{
+						if (bottomMax > rightMax)
+						{
+							pointX = pointX + missCount - 1;
+							pointY = bottomMaxID;
+						}
+						else
+						{
+							pointX = rightMaxID; 
+							pointY = pointY + missCount - 1;
+						}
+					}
+				}
 			}
 
 		}
@@ -301,8 +357,8 @@ int main()
 	//char str2[50] = "abcedabc";  //Done
 	//char str1[50] = "abcdfgfgfgaaaa";
 	//char str2[50] = "abcdgfgfgfaaaa";  //Done
-	char str1[50] = "abcdhfehijk";
-	char str2[50] = "abcdefhijk";  //Done
+	char str1[50] = "XXXabcd";
+	char str2[50] = "abcdabcd";  //Done
 	//cout << "Please input the first string:";
 	//cin >> str1;
 	//cout << "Please input the second string:";
