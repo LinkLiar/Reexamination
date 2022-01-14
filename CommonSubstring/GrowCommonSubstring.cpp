@@ -1,6 +1,7 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <vector>
+#include <string>
 #include <map>
 #include <iomanip>
 #include <algorithm>
@@ -19,7 +20,7 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 	while (true)
 	{
 		if (dp[pointX][pointY])
-		{	
+		{
 			missCount = 1;
 			result.push_back(make_pair(pointX, pointY));
 			int probeX = tlPoint.first + 1;
@@ -145,7 +146,7 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 				if (bottomLength > min(dp.size() / 3, dp[0].size() / 3))
 				{
 					int i, j;
-					if (longStr[bottomprobeX]>shortStr[bottomprobeX])
+					if (longStr[bottomprobeX] > shortStr[bottomprobeX])
 					{
 						i = rightprobeX - rightLength;
 						j = rightprobeY - rightLength;
@@ -159,8 +160,6 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 						pointX = bottomprobeX;
 						pointY = bottomprobeY;
 					}
-
-
 					if (!(rightprobeX < rows && rightprobeY < cols))
 					{
 						breakFlag = 1;
@@ -178,7 +177,7 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 			}
 			else
 			{
-				if (!(probeX+1 < rows && probeY+1 < cols))
+				if (!(probeX + 1 < rows && probeY + 1 < cols))
 					break;
 				if (dp[pointX + 1][pointY + 1] || dp[pointX + 1][pointY] || dp[pointX][pointY + 1])
 				{
@@ -186,42 +185,42 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 					pointY += 1;
 				}
 				else
-				{	
+				{
 					missCount++;
 					if (missCount > min(brPoint.first - tlPoint.first, brPoint.second - tlPoint.second) / 2)
 						return {};
-					if(!(probeX + missCount < rows && probeY + missCount < cols))
+					if (!(probeX + missCount < rows && probeY + missCount < cols))
 						break;
 					int bottomMax = 0;
 					int bottomMaxID = 0;
 					int rightMax = 0;
 					int rightMaxID = 0;
-					for (int i = 0; i < missCount; i++)
+					for (int i = 0; i <= missCount; i++)
 					{
 						if (dp[pointX + missCount][pointY + i])
-						{	
+						{
 							int tempLength = 1;
-							while (pointX + missCount+ tempLength < rows && pointY + i+ tempLength < cols && dp[pointX + missCount + tempLength][pointY + i + tempLength])
+							while (pointX + missCount + tempLength < rows && pointY + i + tempLength < cols && dp[pointX + missCount + tempLength][pointY + i + tempLength])
 								tempLength++;
 							if (bottomMax < tempLength)
 							{
 								bottomMax = tempLength;
-								bottomMaxID = pointY + i ;
+								bottomMaxID = pointY + i;
 							}
 						}
 
 					}
-					for (int i = 0; i < missCount; i++)
+					for (int i = 0; i <= missCount; i++)
 					{
 						if (dp[pointY + i][pointX + missCount])
 						{
 							int tempLength = 1;
-							while (pointX +i+ tempLength < rows && pointY + missCount + tempLength < cols && dp[pointX + i + tempLength][pointY + missCount + tempLength])
+							while (pointX + i + tempLength < rows && pointY + missCount + tempLength < cols && dp[pointX + i + tempLength][pointY + missCount + tempLength])
 								tempLength++;
 							if (rightMax < tempLength)
 							{
 								rightMax = tempLength;
-								rightMaxID = pointX + i ;
+								rightMaxID = pointX + i;
 							}
 						}
 					}
@@ -236,13 +235,12 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 						}
 						else
 						{
-							pointX = rightMaxID; 
+							pointX = rightMaxID;
 							pointY = pointY + missCount - 1;
 						}
 					}
 				}
 			}
-
 		}
 	}
 	return result;
@@ -251,6 +249,7 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 
 char* GetCommonString(char* str1, char* str2)
 {
+
 	if (str1 == NULL || str2 == NULL) {
 		return NULL;
 	}
@@ -292,8 +291,6 @@ char* GetCommonString(char* str1, char* str2)
 		cout << "\n";
 	}
 
-
-
 	vector<pair<int, int> >result = GetMatchingString(dp, make_pair(0, 0), make_pair(shortLength - 1, longLength - 1), strLong, strShort);
 
 	cout << "StringOne: ";
@@ -307,42 +304,88 @@ char* GetCommonString(char* str1, char* str2)
 		cout << setw(3) << setiosflags(ios::left) << strShort[j];
 	}
 	cout << "\n" << "StringMix: ";
-	for (int i = 0; i < result.size(); i++)
+	string pairStr;
+	vector<pair<int, vector<pair<int, string> > > > odds(strlen(strLong));
+	vector<pair<int, string> > temp;
+	for (int i = 0; i < strlen(strLong); i++)
 	{
-		if (i != 0 && (result[i].first == result[i - 1].first+1 && result[i].second == result[i - 1].second+1))
+		odds.push_back(make_pair(0, temp));
+	}
+	string revise(1, '*');
+	string add(1, '+');
+	for (int i = 0, x = 1; i < static_cast<int>(result.size()) - 1; i++, x++)
+	{
+		if (i != 0 && (result[i].first == result[i - 1].first + 1 && result[i].second == result[i - 1].second + 1))
+		{
 			cout << setw(3) << setiosflags(ios::left) << strLong[result[i].second];
+			pairStr.push_back(strLong[result[i].second]);
+			odds[x].first = 2;
+		}
 		else if (i == 0)
 		{
 			int headGap = result[0].first > result[0].second ? result[0].second : result[0].first;
-			for (int j = 0; j < headGap-1; j++)
+			int headBiasGap = result[0].first < result[0].second ? result[0].second : result[0].first;
+			headBiasGap -= headGap;
+			vector<pair<int, string> >tempString;
+			for (int j = 0; j < headGap; j++, x++)
+			{
 				cout << setw(3) << setiosflags(ios::left) << "*";
-			cout << setw(3) << setiosflags(ios::left) << strLong[0];
+				odds[x].first = 1;
+
+				string char1(1, strLong[result[i].second - j - 1]);
+				string char2(1, strShort[result[i].first - j - 1]);
+				odds[x].second.push_back(make_pair(1, revise + char1));
+				odds[x].second.push_back(make_pair(1, revise + char2));
+			}
+			for (int j = 0; j < headBiasGap-headGap; j++)
+			{
+				if(j==0)
+					odds[0].second.push_back(make_pair(1, add));
+				odds[0].first = 1;
+				if (result[0].first > result[0].second)
+					odds[0].second[0].second.push_back(strShort[result[0].first - headBiasGap + j]);
+				else
+					odds[0].second[0].second.push_back(strLong[result[0].second - headBiasGap + j]);
+			}
+			cout << setw(3) << setiosflags(ios::left) << strLong[result[i].second];
+			odds[x].first = 2;
+			pairStr.push_back(strLong[result[i].second]);
 		}
 		else
 		{
 			int middleGap = result[i].first - result[i - 1].first > result[i].second - result[i - 1].second ? result[i].second - result[i - 1].second : result[i].first - result[i - 1].first;
-			for (int j = 0; j < middleGap-1; j++)
+			int middleBiasGap = result[i].first - result[i - 1].first < result[i].second - result[i - 1].second ? result[i].second - result[i - 1].second : result[i].first - result[i - 1].first;
+			middleBiasGap -= middleGap;
+			for (int j = 0; j < middleGap - 1; j++, x++)
+			{
 				cout << setw(3) << setiosflags(ios::left) << "*";
-	
-	/*		if(result[i - 1].first- result[i - 1].second == result[i].first- result[i].second)*/
+				odds[x].first = 1;
+				string char1(1, strLong[result[i - 1].second + j + 1]);
+				string char2(1, strShort[result[i - 1].first + j + 1]);
+				odds[x].second.push_back(make_pair(1, revise + char1));
+				odds[x].second.push_back(make_pair(1, revise + char2));
+			}
+			for (int j = 0; j < middleBiasGap; j++)
+			{
+				if (j == 0)
+					odds[x-1].second.push_back(make_pair(1, add));
+				if (result[i].first - result[i - 1].first > result[i].second - result[i - 1].second)
+					odds[x-1].second.back().second.push_back(strShort[result[i].first - middleBiasGap + j]);
+				else
+					odds[x-1].second.back().second.push_back(strLong[result[i].second - middleBiasGap + j]);
+			}
 			cout << setw(3) << setiosflags(ios::left) << strLong[result[i].second];
-
+			odds[x].first = 2;
+			pairStr.push_back(strLong[result[i].second]);
 		}
-		//if (result[i].first == result[i].second && i == result[i].first)
-		//	cout << setw(3) << setiosflags(ios::left) << strShort[i];
-		//else
-		//	return NULL;
-
-
-
 	}
-
+	odds[0].first = 2;
 	return NULL;
 }
 int main()
 {
-	//char str1[50]="abcnabcd";
-	//char str2[50]="abcdbcd";
+	//char str1[50] = "babcnabcd";
+	//char str2[50] = "aabcdbcd";
 	//char str1[50] = "aaaabaaa";
 	//char str2[50] = "aaaaaaab";
 	//char str1[50] = "abcdfgfhijk";
@@ -355,10 +398,10 @@ int main()
 	//char str1[50] = "abcdgfgfgfbaba";  //Done
 	//char str1[50] = "abcdeabc";
 	//char str2[50] = "abcedabc";  //Done
-	//char str1[50] = "abcdfgfgfgaaaa";
-	//char str2[50] = "abcdgfgfgfaaaa";  //Done
-	char str1[50] = "XXXabcd";
-	char str2[50] = "abcdabcd";  //Done
+	//char str1[128] = "abcdfgfgfgaaaa";
+	//char str2[128] = "abcdgfgfgfaaaa";  //Done
+	char str1[50] = "XXXabcdab";
+	char str2[50] = "xxxabcdabcd";  //Done
 	//cout << "Please input the first string:";
 	//cin >> str1;
 	//cout << "Please input the second string:";
