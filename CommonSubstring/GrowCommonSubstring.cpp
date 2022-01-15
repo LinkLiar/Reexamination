@@ -7,7 +7,7 @@
 #include <algorithm>
 using namespace std;
 
-vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int> tlPoint, pair<int, int> brPoint, char* longStr, char* shortStr)    // 求区域内匹配字数最多的子串集合
+vector<pair<int, int> > GetIntersectionOfMatrix(vector<vector<int> > dp, pair<int, int> tlPoint, pair<int, int> brPoint, const char* str1, const char* str2)    // 求区域内匹配字数最多的子串集合
 {
 	if (tlPoint.first > brPoint.first || tlPoint.second > brPoint.second || tlPoint.first < -1 || tlPoint.second < -1 || brPoint.first >= dp.size() || brPoint.second >= dp[0].size())
 		return {};
@@ -84,7 +84,6 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 						if (!(probeX < rows && probeY < cols))
 						{
 							breakFlag = 1;
-
 						}
 						for (; probeLength > 0; probeLength--, i++, j++)
 							result.push_back(make_pair(i, j));
@@ -98,7 +97,7 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 						if (!(rightprobeX < rows && rightprobeY < cols))
 						{
 							breakFlag = 1;
-							rightLength++;
+							//rightLength++;
 						}
 
 						for (; rightLength > 0; rightLength--, i++, j++)
@@ -129,7 +128,7 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 						if (!(rightprobeX < rows && rightprobeY < cols))
 						{
 							breakFlag = 1;
-							rightLength++;
+							//rightLength++;
 						}
 						for (; rightLength > 0; rightLength--, i++, j++)
 							result.push_back(make_pair(i, j));
@@ -146,7 +145,7 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 				if (bottomLength > min(dp.size() / 3, dp[0].size() / 3))
 				{
 					int i, j;
-					if (longStr[bottomprobeX] > shortStr[bottomprobeX])
+					if (str1[bottomprobeX] > str2[bottomprobeX])
 					{
 						i = rightprobeX - rightLength;
 						j = rightprobeY - rightLength;
@@ -247,40 +246,30 @@ vector<pair<int, int> > GetMatchingString(vector<vector<int> > dp, pair<int, int
 }
 
 
-char* GetCommonString(char* str1, char* str2)
+pair<string, vector<pair<int, vector<pair<int, string> > > > > GetIntersectionOfStrings(const string str1, const string str2)
 {
 
-	if (str1 == NULL || str2 == NULL) {
-		return NULL;
+	if (str1.empty() || str2.empty()) {
+		return {};
 	}
-	int stringLen1 = strlen(str1);
-	int stringLen2 = strlen(str2);
-	char* strLong = str1;
-	char* strShort = str2;
-	int longLength = stringLen1;
-	int shortLength = stringLen2;
-	if (stringLen2 > stringLen1)    // 将短字符串放到字符串2
-	{
-		strLong = str2;
-		strShort = str1;
-		longLength = stringLen2;
-		shortLength = stringLen1;
-	}
+	int length1 = static_cast<int>(str1.size());
+	int length2 = static_cast<int>(str2.size());
+
 	//寻找两个字符串中的公共子串
-	vector<vector<int> > dp(shortLength, vector<int>(longLength, 0));
+	vector<vector<int> > dp(length2, vector<int>(length1, 0));
 	cout << "   ";
 
-	for (int j = 0; j < longLength; j++)
+	for (int j = 0; j < length1; j++)
 	{
-		cout << setw(3) << setiosflags(ios::left) << strLong[j];
+		cout << setw(3) << setiosflags(ios::left) << str1[j];
 	}
 	cout << "\n";
-	for (int i = 0; i < shortLength; i++)
+	for (int i = 0; i < length2; i++)
 	{
-		cout << setw(3) << setiosflags(ios::left) << strShort[i];
-		for (int j = 0; j < longLength; j++)
+		cout << setw(3) << setiosflags(ios::left) << str2[i];
+		for (int j = 0; j < length1; j++)
 		{
-			if (strShort[i] == strLong[j])
+			if (str2[i] == str1[j])
 			{
 				dp[i][j] = 1;
 			}
@@ -291,34 +280,35 @@ char* GetCommonString(char* str1, char* str2)
 		cout << "\n";
 	}
 
-	vector<pair<int, int> >result = GetMatchingString(dp, make_pair(0, 0), make_pair(shortLength - 1, longLength - 1), strLong, strShort);
+	vector<pair<int, int> >result = GetIntersectionOfMatrix(dp, make_pair(0, 0), make_pair(length2 - 1, length1 - 1), str1.c_str(), str2.c_str());
 
 	cout << "StringOne: ";
-	for (int j = 0; j < longLength; j++)
+	for (int j = 0; j < length1; j++)
 	{
-		cout << setw(3) << setiosflags(ios::left) << strLong[j];
+		cout << setw(3) << setiosflags(ios::left) << str1[j];
 	}
 	cout << "\n" << "StringTwo: ";
-	for (int j = 0; j < shortLength; j++)
+	for (int j = 0; j < length2; j++)
 	{
-		cout << setw(3) << setiosflags(ios::left) << strShort[j];
+		cout << setw(3) << setiosflags(ios::left) << str2[j];
 	}
 	cout << "\n" << "StringMix: ";
 	string pairStr;
-	vector<pair<int, vector<pair<int, string> > > > odds(strlen(strLong));
+	vector<pair<int, vector<pair<int, string> > > > odds(max(str1.size(), str2.size()) + 1);
 	vector<pair<int, string> > temp;
-	for (int i = 0; i < strlen(strLong); i++)
+	for (int i = 0; i < str1.size(); i++)
 	{
 		odds.push_back(make_pair(0, temp));
 	}
 	string revise(1, '*');
 	string add(1, '+');
-	for (int i = 0, x = 1; i < static_cast<int>(result.size()) - 1; i++, x++)
+
+	for (int i = 0, x = 1; i < static_cast<int>(result.size()); i++, x++)
 	{
 		if (i != 0 && (result[i].first == result[i - 1].first + 1 && result[i].second == result[i - 1].second + 1))
 		{
-			cout << setw(3) << setiosflags(ios::left) << strLong[result[i].second];
-			pairStr.push_back(strLong[result[i].second]);
+			cout << setw(3) << setiosflags(ios::left) << str1[result[i].second];
+			pairStr.push_back(str1[result[i].second]);
 			odds[x].first = 2;
 		}
 		else if (i == 0)
@@ -331,25 +321,25 @@ char* GetCommonString(char* str1, char* str2)
 			{
 				cout << setw(3) << setiosflags(ios::left) << "*";
 				odds[x].first = 1;
-
-				string char1(1, strLong[result[i].second - j - 1]);
-				string char2(1, strShort[result[i].first - j - 1]);
+				pairStr.push_back('*');
+				string char1(1, str1[result[i].second - j - 1]);
+				string char2(1, str2[result[i].first - j - 1]);
 				odds[x].second.push_back(make_pair(1, revise + char1));
 				odds[x].second.push_back(make_pair(1, revise + char2));
 			}
-			for (int j = 0; j < headBiasGap-headGap; j++)
+			for (int j = 0; j < headBiasGap - headGap; j++)
 			{
-				if(j==0)
+				if (j == 0)
 					odds[0].second.push_back(make_pair(1, add));
 				odds[0].first = 1;
 				if (result[0].first > result[0].second)
-					odds[0].second[0].second.push_back(strShort[result[0].first - headBiasGap + j]);
+					odds[0].second[0].second.push_back(str2[result[0].first - headBiasGap + j]);
 				else
-					odds[0].second[0].second.push_back(strLong[result[0].second - headBiasGap + j]);
+					odds[0].second[0].second.push_back(str1[result[0].second - headBiasGap + j]);
 			}
-			cout << setw(3) << setiosflags(ios::left) << strLong[result[i].second];
+			cout << setw(3) << setiosflags(ios::left) << str1[result[i].second];
 			odds[x].first = 2;
-			pairStr.push_back(strLong[result[i].second]);
+			pairStr.push_back(str1[result[i].second]);
 		}
 		else
 		{
@@ -360,27 +350,53 @@ char* GetCommonString(char* str1, char* str2)
 			{
 				cout << setw(3) << setiosflags(ios::left) << "*";
 				odds[x].first = 1;
-				string char1(1, strLong[result[i - 1].second + j + 1]);
-				string char2(1, strShort[result[i - 1].first + j + 1]);
+				pairStr.push_back('*');
+				string char1(1, str1[result[i - 1].second + j + 1]);
+				string char2(1, str2[result[i - 1].first + j + 1]);
 				odds[x].second.push_back(make_pair(1, revise + char1));
 				odds[x].second.push_back(make_pair(1, revise + char2));
 			}
 			for (int j = 0; j < middleBiasGap; j++)
 			{
 				if (j == 0)
-					odds[x-1].second.push_back(make_pair(1, add));
+					odds[x - 1].second.push_back(make_pair(1, add));
 				if (result[i].first - result[i - 1].first > result[i].second - result[i - 1].second)
-					odds[x-1].second.back().second.push_back(strShort[result[i].first - middleBiasGap + j]);
+					odds[x - 1].second.back().second.push_back(str2[result[i].first - middleBiasGap + j]);
 				else
-					odds[x-1].second.back().second.push_back(strLong[result[i].second - middleBiasGap + j]);
+					odds[x - 1].second.back().second.push_back(str1[result[i].second - middleBiasGap + j]);
 			}
-			cout << setw(3) << setiosflags(ios::left) << strLong[result[i].second];
+			cout << setw(3) << setiosflags(ios::left) << str1[result[i].second];
 			odds[x].first = 2;
-			pairStr.push_back(strLong[result[i].second]);
+			pairStr.push_back(str1[result[i].second]);
+		}
+		if (i == static_cast<int>(result.size()) - 1 && (length2 - result[i].first > 0 || length1 - result[i].second > 0))
+		{
+			int lastGap = length2 - result[i].first > length1 - result[i].second ? length1 - result[i].second : length2 - result[i].first;
+			int lastBiasGap = length2 - result[i].first < length1 - result[i].second ? length1 - result[i].second : length2 - result[i].first;
+			lastBiasGap -= lastGap;
+			for (int j = 0; j < lastGap - 1; j++, x++)
+			{
+				cout << setw(3) << setiosflags(ios::left) << "*";
+				odds[x].first = 1;
+				pairStr.push_back('*');
+				string char1(1, str1[result[i].second + j + 1]);
+				string char2(1, str2[result[i].first + j + 1]);
+				odds[x].second.push_back(make_pair(1, revise + char1));
+				odds[x].second.push_back(make_pair(1, revise + char2));
+			}
+			for (int j = 0; j < lastBiasGap; j++)
+			{
+				if (j == 0)
+					odds[x].second.push_back(make_pair(1, add));
+				if (length2 - result[i].first > length1 - result[i].second)
+					odds[x].second.back().second.push_back(str2[result[i].first + j + 1]);
+				else
+					odds[x].second.back().second.push_back(str1[result[i].second + j + 1]);
+			}
 		}
 	}
 	odds[0].first = 2;
-	return NULL;
+	return make_pair(pairStr, odds);
 }
 int main()
 {
@@ -394,20 +410,23 @@ int main()
 	//char str2[50] = "kkabceabcdecabc";
 	//char str1[50] = "bcddfgfhijk";
 	//char str2[50] = "abcdgfgihij";
-	//char str2[50] = "abcdfgfgfgabab";
-	//char str1[50] = "abcdgfgfgfbaba";  //Done
+	//char str1[50] = "abcdfgfgfgabab";
+	//char str2[50] = "abcdgfgfgfbaba";  
 	//char str1[50] = "abcdeabc";
-	//char str2[50] = "abcedabc";  //Done
+	//char str2[50] = "abcedabc";  
 	//char str1[128] = "abcdfgfgfgaaaa";
-	//char str2[128] = "abcdgfgfgfaaaa";  //Done
+	//char str2[128] = "abcdgfgfgfaaaa";  
 	char str1[50] = "XXXabcdab";
-	char str2[50] = "xxxabcdabcd";  //Done
+	char str2[50] = "xxxabcdabcd";
+	//char str1[50] = "XXXXXXXabcdab";
+	//char str2[50] = "xxxabcdabcd";  
+
 	//cout << "Please input the first string:";
 	//cin >> str1;
 	//cout << "Please input the second string:";
 	//cin >> str2;
 
-	GetCommonString(str1, str2);
+	GetIntersectionOfStrings(str1, str2);
 
 	return 0;
 }
