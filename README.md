@@ -7,3 +7,4 @@ Preparing For Reexamination
 - [ ] String Note
 - [ ] C++11 std::chrono
 - [ ] Leetcode
+- [ ] operator priority
