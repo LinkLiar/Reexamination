@@ -1,5 +1,4 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
-#pragma warning(disable:26451)
 #include <iostream>
 #include <vector>
 #include <string>
@@ -8,12 +7,17 @@
 #include <algorithm>
 using namespace std;
 
+typedef struct
+{
+	string pairStr;
+	vector<pair<int, vector<pair<int, string> > > >odds;
+}MergeFrameResult;
+
 vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string str2, pair<int, int> tlPoint, pair<int, int> brPoint)    // 求区域内匹配字数最多的子串集合
 {
 	if (str1.empty() || str2.empty())
-	{
 		return {};
-	}
+
 	const int length1 = static_cast<int>(str1.size());
 	const int length2 = static_cast<int>(str2.size());
 
@@ -22,8 +26,8 @@ vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string 
 
 	//寻找两个字符串中的公共子串
 	vector<vector<int> > dp(length2, vector<int>(length1, 0));
-	cout << "   ";
 
+	cout << "   ";
 	for (int j = 0; j < length1; j++)
 	{
 		cout << setw(3) << setiosflags(ios::left) << str1[j];
@@ -35,9 +39,7 @@ vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string 
 		for (int j = 0; j < length1; j++)
 		{
 			if (str2[i] == str1[j])
-			{
 				dp[i][j] = 1;
-			}
 			else
 				dp[i][j] = 0;
 			cout << setw(3) << setiosflags(ios::left) << dp[i][j];
@@ -47,10 +49,11 @@ vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string 
 
 	int rows = brPoint.first + 1;
 	int cols = brPoint.second + 1;
-	vector<pair<int, int> >result;
-	int pointX = tlPoint.first;
+	int pointX = tlPoint.first;    // 设置起始点
 	int pointY = tlPoint.second;
 	int missCount = 1;
+	vector<pair<int, int> >result;
+
 	while (true)
 	{
 		if (dp[pointX][pointY])
@@ -63,7 +66,7 @@ vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string 
 
 			if (probeX < rows && probeY < cols && dp[probeX][probeY])
 			{
-				while (dp[probeX][probeY])
+				while ((probeX < rows && probeY < cols) && dp[probeX][probeY])
 				{
 					result.push_back(make_pair(probeX, probeY));
 					probeLength++;
@@ -120,12 +123,12 @@ vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string 
 					{
 						int i = probeX - probeLength;
 						int j = probeY - probeLength;
+
 						if (!(probeX < rows && probeY < cols))
-						{
 							breakFlag = 1;
-						}
 						for (; probeLength > 0; probeLength--, i++, j++)
 							result.push_back(make_pair(i, j));
+
 						pointX = probeX;
 						pointY = probeY;
 					}
@@ -133,14 +136,12 @@ vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string 
 					{
 						int i = rightprobeX - rightLength;
 						int j = rightprobeY - rightLength;
-						if (!(rightprobeX < rows && rightprobeY < cols))
-						{
-							breakFlag = 1;
-							//rightLength++;
-						}
 
+						if (!(rightprobeX < rows && rightprobeY < cols))
+							breakFlag = 1;
 						for (; rightLength > 0; rightLength--, i++, j++)
 							result.push_back(make_pair(i, j));
+
 						pointX = rightprobeX;
 						pointY = rightprobeY;
 					}
@@ -151,12 +152,12 @@ vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string 
 					{
 						int i = bottomprobeX - bottomLength;
 						int j = bottomprobeY - bottomLength;
+
 						if (!(bottomprobeX < rows && bottomprobeY < cols))
-						{
 							breakFlag = 1;
-						}
 						for (; bottomLength > 0; bottomLength--, i++, j++)
 							result.push_back(make_pair(i, j));
+
 						pointX = bottomprobeX;
 						pointY = bottomprobeY;
 					}
@@ -164,13 +165,12 @@ vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string 
 					{
 						int i = rightprobeX - rightLength;
 						int j = rightprobeY - rightLength;
+
 						if (!(rightprobeX < rows && rightprobeY < cols))
-						{
 							breakFlag = 1;
-							//rightLength++;
-						}
 						for (; rightLength > 0; rightLength--, i++, j++)
 							result.push_back(make_pair(i, j));
+
 						pointX = rightprobeX;
 						pointY = rightprobeY;
 					}
@@ -205,7 +205,6 @@ vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string 
 					}
 					for (; rightLength > 0; rightLength--, i++, j++)
 						result.push_back(make_pair(i, j));
-
 				}
 				else
 				{
@@ -282,41 +281,51 @@ vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string 
 	}
 	return result;
 }
-typedef struct
-{
-	string pairStr;
-	vector<pair<int, vector<pair<int, string> > > >  odds;
-}MergeFrameResult;
 
 MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameResult mergedResult2)
 {
 	MergeFrameResult fusionResult;
 	if (mergedResult1.pairStr.empty() || mergedResult2.pairStr.empty())
-	{
 		return fusionResult;
-	}
-	string& str1 = mergedResult1.pairStr;
-	string& str2 = mergedResult2.pairStr;
-	const int length1 = static_cast<int>(str1.size());
-	const int length2 = static_cast<int>(str2.size());
-	string revise(1, '*');
-	string add(1, '+');
-	vector<pair<int, int> >result = GetIntersectionOfMatrix(str1, str2, make_pair(0, 0), make_pair(length2 - 1, length1 - 1));
 
-	vector<pair<int, vector<pair<int, string> > > >& mainOdds = mergedResult1.odds;
-	vector<pair<int, vector<pair<int, string> > > >& tempOdds = mergedResult2.odds;
+	string str1 = mergedResult1.pairStr;
+	string str2 = mergedResult2.pairStr;
 
-	if (mergedResult1.odds[0].first < mergedResult2.odds[0].first)
+	vector<pair<int, vector<pair<int, string> > > >mainOdds = mergedResult1.odds;
+	vector<pair<int, vector<pair<int, string> > > >tempOdds = mergedResult2.odds;
+
+	if (str1.size() > str2.size())
 	{
 		mainOdds = mergedResult2.odds;
 		tempOdds = mergedResult1.odds;
+		str1 = mergedResult2.pairStr;
+		str2 = mergedResult1.pairStr;
 	}
-	for (int i = 0, x = 1; i < static_cast<int>(result.size()); i++, x++) //假设横大
+	int length1 = static_cast<int>(str1.size());
+	int length2 = static_cast<int>(str2.size());
+
+	string revise(1, '*');
+	string add(1, '+');
+	string str;
+
+	vector<pair<int, int> >result = GetIntersectionOfMatrix(str1, str2, make_pair(0, 0), make_pair(length2 - 1, length1 - 1));
+
+	vector<pair<int, vector<pair<int, string> > > >vote;
+	vector<pair<int, string> > temp;
+	for (int i = 0; i < (min(str1.size(),str2.size()) + 1); i++)
+	{
+		vote.push_back(make_pair(0, temp));
+	}
+	for (int i = 0, x = 1; i < static_cast<int>(result.size()); i++, x++)   // 假设横大
 	{
 		if (i != 0 && (result[i].first == result[i - 1].first + 1 && result[i].second == result[i - 1].second + 1))
 		{
-			mainOdds[result[i].second + 1].first += tempOdds[result[i].first + 1].first;
-			mainOdds[result[i].second + 1].second.insert(mainOdds[result[i].second + 1].second.end(), tempOdds[result[i].first + 1].second.begin(), tempOdds[result[i].first + 1].second.end());
+			str.push_back(str1[result[i].second]);
+			//mainOdds[result[i].second + 1].first += tempOdds[result[i].first + 1].first;
+			//mainOdds[result[i].second + 1].second.insert(mainOdds[result[i].second + 1].second.end(), tempOdds[result[i].first + 1].second.begin(), tempOdds[result[i].first + 1].second.end());
+			vote[x].first = mainOdds[result[i].second + 1].first + tempOdds[result[i].first + 1].first;
+			vote[x].second.insert(vote[x].second.end(), mainOdds[result[i].second + 1].second.begin(), mainOdds[result[i].second + 1].second.end());
+			vote[x].second.insert(vote[x].second.end(), tempOdds[result[i].first + 1].second.begin(), tempOdds[result[i].first + 1].second.end());
 		}
 		else if (i == 0)
 		{
@@ -326,6 +335,7 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 			vector<pair<int, string> >tempString;
 			for (int j = 0; j < headGap; j++, x++)
 			{
+				str.push_back('*');
 				string char1(1, str1[result[i].second - j - 1]);
 				string char2(1, str2[result[i].first - j - 1]);
 				if (str1[result[i].second - j - 1] == '*' || str2[result[i].second - j - 1] == '*')
@@ -337,22 +347,30 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 				}
 				else
 				{
-					mainOdds[result[i].second - j].second.push_back(make_pair(tempOdds[result[i].second - j].first, revise + char1));
+					mainOdds[result[i].second - j].second.push_back(make_pair(mainOdds[result[i].second - j].first, revise + char1));
 					mainOdds[result[i].second - j].second.push_back(make_pair(tempOdds[result[i].first - j].first, revise + char2));
 				}
 				mainOdds[result[i].second - j].second.insert(mainOdds[result[i].second - j].second.end(), tempOdds[result[i].first - j].second.begin(), tempOdds[result[i].first - j].second.end());
+				vote[x].first = mainOdds[result[i].second - j].first;
+				vote[x].second = mainOdds[result[i].second - j].second;
+			
 			}
-			for (int j = 0; j < (headBiasGap - headGap); j++)
+			for (int j = 0; j < headBiasGap; j++)
 			{
 				if (j == 0)
 					mainOdds[0].second.push_back(make_pair(tempOdds[0].first, add));
 				if (result[0].first > result[0].second)
-					mainOdds[0].second[0].second.push_back(str2[result[0].first - headBiasGap + j]);
+					mainOdds[0].second[mainOdds[0].second.size() - 1].second.push_back(str2[result[0].first - headBiasGap + j]);
 				else
-					mainOdds[0].second[0].second.push_back(str1[result[0].second - headBiasGap + j]);
+					mainOdds[0].second[mainOdds[0].second.size() - 1].second.push_back(str1[result[0].second - headBiasGap + j]);
 			}
+			if(headBiasGap>0)
+				vote[0].second = mainOdds[result[i].second].second;
+			str.push_back(str1[result[i].second]);
 			mainOdds[result[i].second + 1].first += tempOdds[result[i].first + 1].first;
 			mainOdds[result[i].second + 1].second.insert(mainOdds[result[i].second + 1].second.end(), tempOdds[result[i].first + 1].second.begin(), tempOdds[result[i].first + 1].second.end());
+			vote[x].first = mainOdds[result[i].second + 1].first;
+			vote[x].second = mainOdds[result[i].second + 1].second;
 		}
 		else
 		{
@@ -361,42 +379,56 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 			middleBiasGap -= middleGap;
 			for (int j = 0; j < (middleGap - 1); j++, x++)
 			{
-				string char1(1, str1[result[i].second - j - 1]);
-				string char2(1, str2[result[i].first - j - 1]);
-				if (str1[result[i].second - j - 1] == '*' || str2[result[i].second - j - 1] == '*')
+				str.push_back('*');
+				string char1(1, str1[result[i - 1].second + j + 1]);
+				string char2(1, str2[result[i - 1].first + j + 1]);
+				if (char1[0] == '*' || char2[0] == '*')
 				{
-					if (str1[result[i].second - j - 1] == '*')
-						mainOdds[result[i].second - j].second.push_back(make_pair(tempOdds[result[i].first - j].first, revise + char2));
-					else if (str2[result[i].second - j - 1] == '*')
-						mainOdds[result[i].second - j].second.push_back(make_pair(tempOdds[result[i].second - j].first, revise + char1));
+					if (char1[0] == '*')
+						vote[x].second.push_back(make_pair(tempOdds[result[i - 1].first + j+2].first, revise + char2));
+					else if (char2[0] == '*')
+						vote[x].second.push_back(make_pair(mainOdds[result[i - 1].second + j+2].first, revise + char1));
 				}
 				else
 				{
-					mainOdds[result[i].second - j].second.push_back(make_pair(tempOdds[result[i].second - j].first, revise + char1));
-					mainOdds[result[i].second - j].second.push_back(make_pair(tempOdds[result[i].first - j].first, revise + char2));
+					vote[x].second.push_back(make_pair(tempOdds[result[i - 1].first + j + 2].first, revise + char2));
+					vote[x].second.push_back(make_pair(mainOdds[result[i - 1].second + j + 2].first, revise + char1));
 				}
-				mainOdds[result[i].second - j].second.insert(mainOdds[result[i].second - j].second.end(), tempOdds[result[i].first - j].second.begin(), tempOdds[result[i].first - j].second.end());
+				vote[x].second.insert(vote[x].second.end(), mainOdds[result[i - 1].second + j + 2].second.begin(), mainOdds[result[i - 1].second + j + 2].second.end());
+				vote[x].second.insert(vote[x].second.end(), tempOdds[result[i - 1].first + j + 2].second.begin(), tempOdds[result[i - 1].first + j + 2].second.end());
 			}
+			int count = 0;
 			for (int j = 0; j < middleBiasGap; j++)
 			{
 				if (j == 0)
-					mainOdds[x - 1].second.push_back(make_pair(tempOdds[result[i].first - middleGap].first, add));
+					vote[x-1].second.push_back(make_pair(count, add));
 				if (result[i].first - result[i - 1].first > result[i].second - result[i - 1].second)
-					mainOdds[x - 1].second.back().second.push_back(str2[result[i].first - middleBiasGap + j]);
+				{
+					vote[x-1].second.back().second.push_back(str2[result[i].first - middleBiasGap + j]);
+					count += (j + 1) * tempOdds[result[i].first + j + middleGap].first;
+				}
 				else
-					mainOdds[x - 1].second.back().second.push_back(str1[result[i].second - middleBiasGap + j]);
+				{
+					vote[x-1].second.back().second.push_back(str1[result[i].second - middleBiasGap + j]);
+					count += (j + 1) * mainOdds[result[i].second + j + middleGap].first;
+				}
+				vote[x - 1].second.back().first = count;
 			}
-			mainOdds[result[i].second + 1].first += tempOdds[result[i].first + 1].first;
-			mainOdds[result[i].second + 1].second.insert(mainOdds[result[i].second + 1].second.end(), tempOdds[result[i].first + 1].second.begin(), tempOdds[result[i].first + 1].second.end());
+			str.push_back(str1[result[i].second]);
+			vote[x].first = mainOdds[result[i].second + 1].first + tempOdds[result[i].first + 1].first;
+			vote[x].second.insert(vote[x].second.end(), tempOdds[result[i].first + 1].second.begin(), tempOdds[result[i].first + 1].second.end());
+			vote[x].second.insert(vote[x].second.end(), mainOdds[result[i].second + 1].second.begin(), mainOdds[result[i].second + 1].second.end());
 		}
 		if (i == static_cast<int>(result.size()) - 1 && (length2 - result[i].first > 0 || length1 - result[i].second > 0))
 		{
+			x++;
 			int lastGap = length2 - result[i].first > length1 - result[i].second ? length1 - result[i].second : length2 - result[i].first;
 			int lastBiasGap = length2 - result[i].first < length1 - result[i].second ? length1 - result[i].second : length2 - result[i].first;
 			lastBiasGap -= lastGap;
 
 			for (int j = 0; j < (lastGap - 1); j++, x++)
 			{
+				str.push_back('*');
 				string char1(1, str1[result[i].second + j + 1]);
 				string char2(1, str2[result[i].first + j + 1]);
 				if (str1[result[i].second + j + 1] == '*' || str2[result[i].first + j + 1] == '*')
@@ -408,42 +440,54 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 				}
 				else
 				{
-					mainOdds[result[i].second + j + 2].second.push_back(make_pair(mainOdds[result[i].second + j + 2].first, revise + char1));
-					mainOdds[result[i].second + j + 2].second.push_back(make_pair(tempOdds[result[i].first + j + 2].first, revise + char2));
+					mainOdds[result[i].second + j + 2 ].second.push_back(make_pair(mainOdds[result[i].second + j + 2].first, revise + char1));
+					mainOdds[result[i].second + j + 2 ].second.push_back(make_pair(tempOdds[result[i].first + j + 2].first, revise + char2));
 				}
 				mainOdds[result[i].second + j + 2].second.insert(mainOdds[result[i].second + j + 2].second.end(), tempOdds[result[i].first + j + 2].second.begin(), tempOdds[result[i].first + j + 2].second.end());
+				vote[x].first = mainOdds[result[i].second + j + 2].first;
+				vote[x].second = mainOdds[result[i].second + j + 2].second;
 			}
+			int count = 0;
 			for (int j = 0; j < lastBiasGap; j++)
 			{
 				if (j == 0)
-					mainOdds[x].second.push_back(make_pair(tempOdds[result[i].first + 1].first, add));
+					mainOdds[x].second.push_back(make_pair(count, add));
 				if (length2 - result[i].first > length1 - result[i].second)
+				{
 					mainOdds[x].second.back().second.push_back(str2[result[i].first + j + lastGap]);
+					count += (j + 1) * tempOdds[result[i].first + j + lastGap+1].first;  // +1
+				}
 				else
+				{
 					mainOdds[x].second.back().second.push_back(str1[result[i].second + j + lastGap]);
+					count += (j + 1) * mainOdds[result[i].second + j + lastGap+1].first;
+				}
+				mainOdds[x].second.back().first = count;
+
 			}
+			if(lastBiasGap>0)
+				vote[x-1].second.push_back(mainOdds[x].second.back());
 		}
 	}
 	int matchTime = 0;
-	
+
 	for (int i = 1; i < mainOdds.size(); i++)
 	{
 		if (matchTime < mainOdds[i].first)
 			matchTime = mainOdds[i].first;
 	}
 	mainOdds[0].first = matchTime;
-	auto iterOdds = mainOdds.begin();
-	auto iterStr = str1.begin();
+	auto iterStr = str.begin();
+	auto iterOdds = vote.begin();
 
-	for (; iterOdds != mainOdds.end(); ++iterOdds)
+	for (; iterOdds != vote.end(); ++iterOdds)
 	{
-
 		if (!iterOdds->second.empty())
 		{
-			vector<pair<int, string> > & oddPairs = iterOdds->second;
-			for (auto subIter = oddPairs.begin(); subIter != oddPairs.end(); ++subIter)
+			vector<pair<int, string> >& oddPairs = iterOdds->second;
+			for (auto subIter = oddPairs.begin(); subIter != oddPairs.end(); ++subIter)    //统计合并相同项
 			{
-				pair<int, string>& temp= *subIter;
+				pair<int, string>& temp = *subIter;
 				for (auto next = subIter + 1; next != oddPairs.end(); )
 				{
 					pair<int, string> nextPair = *next;
@@ -456,6 +500,7 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 						++next;
 				}
 			}
+			auto temp = iterStr;
 			for (auto subIter = oddPairs.begin(); subIter != oddPairs.end(); )
 			{
 				if (subIter->first > (matchTime / 2))
@@ -463,29 +508,39 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 					if (subIter->second[0] == '*')
 					{
 						*iterStr = subIter->second[1];
+						iterOdds->first = subIter->first;
 						subIter = oddPairs.erase(subIter);
+
 					}
 					else if (subIter->second[0] == '+')
 					{
-						auto start = ++subIter->second.begin();
+						temp = iterStr + 1;
+
+
+						auto start = ++(subIter->second.begin());
 						auto end = subIter->second.end();
-						str1.insert(iterStr, start, end);
+						if (iterOdds == vote.begin())
+							str.insert(iterStr, start, end);
+						else
+							str.insert(iterStr+1, start, end);
 						subIter = oddPairs.erase(subIter);
 					}
 					else
 						++subIter;
-						
 				}
 				else
 					++subIter;
 			}
+			iterStr = temp;
+		}
+
+		if (iterOdds != vote.begin() && iterStr != str.end())
+		{
+			iterStr++;
 		}
 	}
-
-
-
-
-
+	fusionResult.odds = vote;
+	fusionResult.pairStr = str;
 	return fusionResult;
 }
 
@@ -513,9 +568,9 @@ MergeFrameResult GetIntersectionOfStrings(const string str1, const string str2)
 	}
 	cout << "\n" << "StringMix: ";
 	string pairStr;
-	vector<pair<int, vector<pair<int, string> > > > odds(max(str1.size(), str2.size()) + 1);
+	vector<pair<int, vector<pair<int, string> > > > odds;
 	vector<pair<int, string> > temp;
-	for (int i = 0; i < str1.size(); i++)
+	for (int i = 0; i < (max(str1.size(), str2.size()) + 1); i++)
 	{
 		odds.push_back(make_pair(0, temp));
 	}
@@ -614,7 +669,6 @@ MergeFrameResult GetIntersectionOfStrings(const string str1, const string str2)
 					odds[x].second.back().second.push_back(str2[result[i].first + j + lastGap]);
 				else
 					odds[x].second.back().second.push_back(str1[result[i].second + j + lastGap]);
-
 			}
 		}
 	}
@@ -641,24 +695,48 @@ int main()
 	//char str2[50] = "abcdgfgfgfbaba";  
 	//char str1[50] = "abcdeabc";
 	//char str2[50] = "abcedabc";  
-	char str3[128] = "abcdfgfgfaaaa";
-	char str1[128] = "abcdgfgfgfaaaa";
-	char str2[128] = "abcdgfgfgfaaabb";
+	//char str3[128] = "abcdfgfgfaaaab";
+	//char str1[128] = "abcdgfgfgfaaaa";
+	//char str2[128] = "abcdgfgfgfaaabb";
 	//char str1[50] = "XXXXXXXabcdab";
 	//char str2[50] = "xxxabcdabcd";  
+	//char str1[128] = "abcdab";
+	//char str2[128] = "abcddedb";
+	//char str3[128] = "abcd";
 
-	//char str1[50] = "XXXabadabg";
-	//char str2[50] = "xxxabcdabcd";
-	//char str3[50] = "xXXabcdabcd";
+	char str1[50] = "axxxabadabgd";
+	char str2[50] = "xXXabcdabcd";
+	char str3[50] = "axXxabcdabcd";
 	MergeFrameResult threeFrame;
 
-	threeFrame.pairStr = string("abcdgfgfgfaaabb");
+	threeFrame.pairStr = string(str3);
 	vector<pair<int, string> > temp;
-	for (int i = 0; i < threeFrame.pairStr.size(); i++)
+	for (int i = 0; i < (threeFrame.pairStr.size() + 1); i++)
 	{
 		threeFrame.odds.push_back(make_pair(1, temp));
 	}
-	GetUnionOfStrings(GetIntersectionOfStrings(str1, str2), threeFrame/*GetIntersectionOfStrings(str2, str3)*/);
+	threeFrame = GetUnionOfStrings(threeFrame, GetIntersectionOfStrings(str1, str2));
+
+	cout << "StringOne: ";
+	for (int j = 0; j < strlen(str1); j++)
+	{
+		cout << setw(3) << setiosflags(ios::left) << str1[j];
+	}
+	cout << "\n" << "StringTwo: ";
+	for (int j = 0; j < strlen(str2); j++)
+	{
+		cout << setw(3) << setiosflags(ios::left) << str2[j];
+	}
+	cout << "\n" << "StringThr: ";
+	for (int j = 0; j < strlen(str3); j++)
+	{
+		cout << setw(3) << setiosflags(ios::left) << str3[j];
+	}
+	cout << "\n" << "StringMix: ";
+	for (int j = 0; j < threeFrame.pairStr.size(); j++)
+	{
+		cout << setw(3) << setiosflags(ios::left) << threeFrame.pairStr[j];
+	}
 
 	return 0;
 }
