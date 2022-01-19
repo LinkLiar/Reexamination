@@ -341,36 +341,45 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 				if (str1[result[i].second - j - 1] == '*' || str2[result[i].second - j - 1] == '*')
 				{
 					if (str1[result[i].second - j - 1] == '*')
-						mainOdds[result[i].second - j].second.push_back(make_pair(tempOdds[result[i].first - j].first, revise + char2));
-					else if (str2[result[i].second - j - 1] == '*')
-						mainOdds[result[i].second - j].second.push_back(make_pair(tempOdds[result[i].second - j].first, revise + char1));
+						vote[x].second.push_back(make_pair(tempOdds[result[i].first - j].first, revise + char2));
+					else if (str2[result[i].second - j - 1] == '*')	
+						vote[x].second.push_back(make_pair(mainOdds[result[i].first - j].first, revise + char1));
 				}
 				else
 				{
-					mainOdds[result[i].second - j].second.push_back(make_pair(mainOdds[result[i].second - j].first, revise + char1));
-					mainOdds[result[i].second - j].second.push_back(make_pair(tempOdds[result[i].first - j].first, revise + char2));
+					vote[x].second.push_back(make_pair(mainOdds[result[i].second - j].first, revise + char1));
+					vote[x].second.push_back(make_pair(tempOdds[result[i].first - j].first, revise + char2));
 				}
-				mainOdds[result[i].second - j].second.insert(mainOdds[result[i].second - j].second.end(), tempOdds[result[i].first - j].second.begin(), tempOdds[result[i].first - j].second.end());
-				vote[x].first = mainOdds[result[i].second - j].first;
-				vote[x].second = mainOdds[result[i].second - j].second;
+				vote[x].second.insert(vote[x].second.end(), mainOdds[result[i].second - j].second.begin(), mainOdds[result[i].second - j].second.end());
+				vote[x].second.insert(vote[x].second.end(), tempOdds[result[i].first - j].second.begin(), tempOdds[result[i].first - j].second.end());
 			
 			}
+			int count = 0;
 			for (int j = 0; j < headBiasGap; j++)
 			{
 				if (j == 0)
-					mainOdds[0].second.push_back(make_pair(tempOdds[0].first, add));
+					vote[0].second.push_back(make_pair(count, add));
 				if (result[0].first > result[0].second)
-					mainOdds[0].second[mainOdds[0].second.size() - 1].second.push_back(str2[result[0].first - headBiasGap + j]);
+				{
+					vote[0].second.back().second.push_back(str2[result[0].first - headBiasGap + j]);
+					count += (j + 1) * tempOdds[result[0].first - headBiasGap + j+1].first;
+				}
 				else
-					mainOdds[0].second[mainOdds[0].second.size() - 1].second.push_back(str1[result[0].second - headBiasGap + j]);
+				{
+					vote[0].second.back().second.push_back(str1[result[0].second - headBiasGap + j]);
+					count += (j + 1) * mainOdds[result[0].second - headBiasGap + j+1].first;
+				}
+				vote[0].second.back().first = count;
 			}
-			if(headBiasGap>0)
-				vote[0].second = mainOdds[result[i].second].second;
+			vote[0].second.insert(vote[0].second.end(), mainOdds[result[0].second].second.begin(), mainOdds[result[0].second].second.end());
+			vote[0].second.insert(vote[0].second.end(), tempOdds[result[0].first].second.begin(), tempOdds[result[0].first].second.end());
+
+
 			str.push_back(str1[result[i].second]);
-			mainOdds[result[i].second + 1].first += tempOdds[result[i].first + 1].first;
-			mainOdds[result[i].second + 1].second.insert(mainOdds[result[i].second + 1].second.end(), tempOdds[result[i].first + 1].second.begin(), tempOdds[result[i].first + 1].second.end());
-			vote[x].first = mainOdds[result[i].second + 1].first;
-			vote[x].second = mainOdds[result[i].second + 1].second;
+			vote[x].first = mainOdds[result[i].second + 1].first + tempOdds[result[i].first + 1].first;
+			vote[x].second.insert(vote[x].second.end(), mainOdds[result[i].second + 1].second.begin(), mainOdds[result[i].second + 1].second.end());
+			vote[x].second.insert(vote[x].second.end(), tempOdds[result[i].first + 1].second.begin(), tempOdds[result[i].first + 1].second.end());
+
 		}
 		else
 		{
@@ -446,6 +455,13 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 				mainOdds[result[i].second + j + 2].second.insert(mainOdds[result[i].second + j + 2].second.end(), tempOdds[result[i].first + j + 2].second.begin(), tempOdds[result[i].first + j + 2].second.end());
 				vote[x].first = mainOdds[result[i].second + j + 2].first;
 				vote[x].second = mainOdds[result[i].second + j + 2].second;
+
+
+
+
+
+
+
 			}
 			int count = 0;
 			for (int j = 0; j < lastBiasGap; j++)
@@ -471,12 +487,12 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 	}
 	int matchTime = 0;
 
-	for (int i = 1; i < mainOdds.size(); i++)
+	for (int i = 1; i < vote.size(); i++)
 	{
-		if (matchTime < mainOdds[i].first)
-			matchTime = mainOdds[i].first;
+		if (matchTime < vote[i].first)
+			matchTime = vote[i].first;
 	}
-	mainOdds[0].first = matchTime;
+	vote[0].first = matchTime;
 	auto iterStr = str.begin();
 	auto iterOdds = vote.begin();
 
@@ -705,8 +721,8 @@ int main()
 	//char str3[128] = "abcd";
 
 	char str1[50] = "axxxabadabgd";
-	char str2[50] = "xXXabcdabcd";
-	char str3[50] = "axXxabcdabcd";
+	char str3[50] = "xXXabcdabcd";
+	char str2[50] = "axXxabcdabcd";
 	MergeFrameResult threeFrame;
 
 	threeFrame.pairStr = string(str3);
