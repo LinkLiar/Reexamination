@@ -1,2 +1,14 @@
 ﻿  GrowCommonSubstring.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include\utility(249,55): warning C4267: 'initializing': conversion from 'size_t' to '_Ty1', possible loss of data
+          with
+          [
+              _Ty1=int
+          ]
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\GrowCommonSubstring.cpp(655): message : see reference to function template instantiation 'std::pair<int,int>::pair<unsigned __int64,unsigned __int64,0>(std::pair<unsigned __int64,unsigned __int64> &&) noexcept' being compiled
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\GrowCommonSubstring.cpp(655): message : see reference to function template instantiation 'std::pair<int,int>::pair<unsigned __int64,unsigned __int64,0>(std::pair<unsigned __int64,unsigned __int64> &&) noexcept' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include\utility(249,55): warning C4267: 'initializing': conversion from 'size_t' to '_Ty2', possible loss of data
+          with
+          [
+              _Ty2=int
+          ]
   CommonSubstring.vcxproj -> C:\Users\Link\source\repos\CommonSubstring\x64\Debug\CommonSubstring.exe
