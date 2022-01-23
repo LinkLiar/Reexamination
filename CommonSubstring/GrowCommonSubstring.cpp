@@ -532,7 +532,7 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 					count.push_back(mainOdds[result[i].second + j + lastGap + 1].first + '0');
 				}
 
-				//if (j == lastBiasGap - 1)
+				//if (j == lastBiasGap - 1)  // TODO
 				//{
 				//	//vote[x - 1].second.back().second.push_back(str1[result[i].second + j + lastGap]);
 				//	//count.push_back(mainOdds[result[i].second + j + lastGap + 1].first + '0');
@@ -565,6 +565,7 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 
 	for (; iterOdds != vote.end(); ++iterOdds)
 	{
+		int a = iterOdds - vote.begin();
 		if (!iterOdds->second.empty())
 		{
 			vector<pair<int, string> >& oddPairs = iterOdds->second;
@@ -603,6 +604,7 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 
 			vector<pair<int, string> >adds;
 			int addTime = 0;
+			int firstFlag = 0;
 			for (auto subIter = oddPairs.begin(); subIter != oddPairs.end(); )
 			{
 				pair<int, string>& temp = *subIter;
@@ -616,7 +618,7 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 					++subIter;
 				}
 			}
-			if (adds.size() >= 1/*|| (adds.size()==1 && adds[0].first > matchTime)*/)
+			if (adds.size() >= 1)
 			{
 				pair<string, string>final;
 				int max = 0;
@@ -654,7 +656,7 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 
 							vector<pair<int, int> >result = GetIntersectionOfMatrix(main.second, subAdd->second, make_pair(0, 0), make_pair(subAdd->second.size() - 1, main.second.size() - 1), mainOdd, tempOdd);
 
-							if (result.size() > 1 /*&& result[1].first < result.size() && result[1].second < result.size()*/)
+							if (result.size() > 1)
 							{
 								for (int i = 1; i < result.size(); i++)
 								{
@@ -698,16 +700,17 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 				}
 				else
 				{
-					final.first.insert(final.first.end(),mainFirst.begin(), mainFirst.end());
-					final.second.insert(final.second.end(),main.second.begin()+1, main.second.end());
+					final.first.insert(final.first.end(), mainFirst.begin(), mainFirst.end());
+					final.second.insert(final.second.end(), main.second.begin() + 1, main.second.end());
 				}
 
 				iterOdds->second.insert(iterOdds->second.end(), adds.begin(), adds.end());
 				bool hasCreated = 0;
 				string tempFirst;
+
 				for (int i = 0; i < final.second.size(); ++i)
 				{
-					if (final.first[i] - '0' >(matchTime / 2))
+					if (final.first[i] - '0' > (matchTime / 2))
 					{
 						hasCreated = 0;
 						if (tempFirst.size() != 0)
@@ -718,9 +721,10 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 
 						if (iterOdds == vote.begin())
 						{
+							firstFlag = 1;
 							addTime++;
 							str.insert(iterStr, final.second[i]);
-							iterOdds=vote.insert(++iterOdds, make_pair(final.first[i] - '0', dummy));
+							iterOdds = vote.insert(++iterOdds, make_pair(final.first[i] - '0', dummy));
 						}
 						else
 						{
@@ -731,7 +735,7 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 					}
 					else
 					{
-						if (final.second[i]=='^')
+						if (final.second[i] == '^')
 						{
 							oddPairs.push_back(make_pair(0, ""));
 							iterOdds->second.back().first = atoi(tempFirst.c_str());;
@@ -741,7 +745,7 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 						{
 							if (!hasCreated)
 							{
-								iterOdds->second.push_back(make_pair(0,""));
+								iterOdds->second.push_back(make_pair(0, ""));
 								hasCreated = 1;
 								iterOdds->second.back().second.push_back('+');
 							}
@@ -757,14 +761,17 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 					tempFirst.clear();
 				}
 			}
-			else 
+			else
 			{
 				iterOdds->second.insert(iterOdds->second.end(), adds.begin(), adds.end());
 			}
 
-			if (addTime!=0)
+			if (addTime != 0)
 			{
-				iterStr = iterStr + addTime - 1;
+				if (firstFlag)
+					iterStr = iterStr + addTime - 1;
+				else
+					iterStr = iterStr + addTime;
 			}
 
 		}
@@ -930,18 +937,18 @@ int main()
 	//char str2[50] = "abcdgfgfgfbaba";  
 	//char str1[50] = "abcdeabc";
 	//char str2[50] = "abcedabc";  
-	//char str2[128] = "abcdfgfgfaaaab";
-	//char str1[128] = "abcdgfgfgfaaaa";
-	//char str3[128] = "abcdgfgfgfaaabb";
+	char str2[128] = "abcdfgfgfaaaab";
+	char str1[128] = "abcdgfgfgfaaaa";
+	char str3[128] = "abcdgfgfgfaaabb";
 	//char str1[50] = "XXXXXXXabcdab";
 	//char str2[50] = "xxxabcdabcd";  
 	//char str1[128] = "abcdab";
 	//char str2[128] = "abcddedb";
 	//char str3[128] = "abcd";
 
-	char str1[50] = "bcaxxxabadabgdab";
-	char str2[50] = "xxxabcdabcda";
-	char str3[50] = "baxXxabcdabcd";
+	//char str1[50] = "bcaxxxabadabgdab";
+	//char str2[50] = "xxxabcdabcda";
+	//char str3[50] = "baxXxabcdabcd";
 	MergeFrameResult threeFrame;
 	threeFrame.pairStr = string(str3);
 	vector<pair<int, string> > temp;
