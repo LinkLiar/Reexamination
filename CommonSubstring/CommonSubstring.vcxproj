@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FindCommonSubstring.cpp" />
     <ClCompile Include="SearchCommonSubstring.cpp" />
     <ClCompile Include="GrowCommonSubstring.cpp" />
   </ItemGroup>
