@@ -960,13 +960,13 @@
 //	MergeFrameResult threeFrame;
 //	threeFrame.pairStr = string(str3);
 //	vector<pair<int, string> > temp;
-//	threeFrame.odds.insert(threeFrame.odds.end(), threeFrame.pairStr.size(), make_pair(1, temp));
+//	threeFrame.odds.insert(threeFrame.odds.end(), threeFrame.pairStr.size()+1, make_pair(1, temp));
 //	MergeFrameResult twoFrame;
 //	twoFrame.pairStr = string(str2);
-//	twoFrame.odds.insert(twoFrame.odds.end(), threeFrame.pairStr.size(), make_pair(1, temp));
+//	twoFrame.odds.insert(twoFrame.odds.end(), twoFrame.pairStr.size()+1, make_pair(1, temp));
 //	MergeFrameResult oneFrame;
 //	oneFrame.pairStr = string(str1);
-//	oneFrame.odds.insert(oneFrame.odds.end(), threeFrame.pairStr.size(), make_pair(1, temp));
+//	oneFrame.odds.insert(oneFrame.odds.end(), oneFrame.pairStr.size()+1, make_pair(1, temp));
 //	//threeFrame = GetUnionOfStrings(threeFrame, GetIntersectionOfStrings(str1, str2));
 //	threeFrame = GetUnionOfStrings(threeFrame, GetUnionOfStrings(oneFrame, twoFrame));
 //	string result = GetResult(GetUnionOfStrings(oneFrame, twoFrame));

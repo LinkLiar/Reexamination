@@ -24,5 +24,8 @@
     <ClCompile Include="FindCommonSubstring.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GetCommonSubstring.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
