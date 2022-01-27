@@ -419,8 +419,11 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 				vote[x].first = mainOdds[result[0].second - headBiasGap + j + 1].first;
 				str.push_back(str1[result[0].second - headBiasGap + j]);
 			}
-			vote[0].second.insert(vote[0].second.end(), mainOdds[result[0].second].second.begin(), mainOdds[result[0].second].second.end());
-			vote[0].second.insert(vote[0].second.end(), tempOdds[result[0].first].second.begin(), tempOdds[result[0].first].second.end());
+			if (result[i].second - 1 >= 0 && result[i].first - 1 >= 0 && !(str1[result[i].second - 1] == '*' || str2[result[i].second - 1] == '*'))
+			{
+				vote[0].second.insert(vote[0].second.end(), mainOdds[result[0].second].second.begin(), mainOdds[result[0].second].second.end());
+				vote[0].second.insert(vote[0].second.end(), tempOdds[result[0].first].second.begin(), tempOdds[result[0].first].second.end());
+			}
 
 			if (result[0].first > result[0].second)
 				str.push_back(str2[result[i].first]);
@@ -459,8 +462,24 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 			string count;
 			for (int j = 0; j < middleBiasGap; j++, x++)
 			{
-				vote[x].first = mainOdds[result[i].second + j - middleGap + 1].first;
-				str.push_back(str1[result[i].second - middleBiasGap + j]);
+				if (result[i].first - result[i - 1].first > result[i].second - result[i - 1].second)
+				{
+					if (j == 0)
+						vote[x - 1].second.push_back(make_pair(0, add));
+					vote[x - 1].second.back().second.push_back(str2[result[i].first - middleBiasGap + j]);
+					count.push_back(tempOdds[result[i].first + j + middleGap].first + '0');
+					if (j == middleBiasGap - 1)
+					{
+						vote[x - 1].second.back().first = atoi(count.c_str());
+						x--;
+					}
+
+				}
+				else
+				{
+					vote[x].first = mainOdds[result[i].second + j - middleGap + 1].first;
+					str.push_back(str1[result[i].second - middleBiasGap + j]);
+				}
 			}
 			str.push_back(str1[result[i].second]);
 			vote[x].first = mainOdds[result[i].second + 1].first + tempOdds[result[i].first + 1].first;
@@ -758,7 +777,7 @@ string GetResult(MergeFrameResult frame)
 				}
 			}
 		}
-		if (float(odds[i + 1].first) < odds[0].first / 2.0)
+		if (float(odds[i + 1].first) < odds[0].first / 2.0 && odds[i + 1].second.empty())
 		{
 			pairStr.erase(i, 1);
 		}
@@ -903,81 +922,76 @@ string GetResult(MergeFrameResult frame)
 
 int main()
 {
-	//char str1[50] = "babcnabcd";
-	//char str2[50] = "aabcdbcd";
-	//char str3[128] = "aaaaaaa";
-	//char str1[50] = "aaaabaaa";
-	//char str2[50] = "aaaaaaab";
-	//char str1[50] = "abcdfgfhijk";
-	//char str2[50] = "abcdgfghijk";
-	//char str1[50] = "abcdabcbdeabckk";
-	//char str2[50] = "kkabceabcdecabc";
-	//char str1[50] = "bcddfgfhijk";
-	//char str2[50] = "abcdgfgihij";
-	//char str1[50] = "abcdfgfgfgabab";
-	//char str2[50] = "abcdgfgfgfbaba";  
-	//char str1[50] = "abcdeabc";
-	//char str2[50] = "abcedabc";  
-	//char str3[128] = "abcdfgfgfaaaab";
-	//char str2[128] = "abcdgfgfgfaaaa";
-	//char str1[128] = "abcdgfgfgfaaabb";
-	//char str1[50] = "XXXXXXXabcdab";
-	//char str2[50] = "xxxabcdabcd";  
-	//char str1[128] = "abcdab";
-	//char str2[128] = "abcddedb";
-	//char str3[128] = "abcd";
-
-	char str1[50] = "bcaxxxabadabgdacb";
-	char str3[50] = "xXxabcdabcda";
-	char str2[50] = "baxXxabcdabcdcb";
-
 	fstream  f("C:\\Users\\Link\\Desktop\\sample.txt");
 	vector<string> words;
-	string  line;
+	string answer;
+	string line;
+	int maxIndex = -1;
+
+	vector<pair<int, string> > temp;
+	MergeFrameResult tempResult;
 	while (getline(f, line))
 	{
-		words.push_back(line);
+		if (words.empty() && answer.empty())
+			answer = line;
+		else
+		{
+			words.push_back(line);
+			MergeFrameResult inputFrame;
+			if (words.size() > 1)
+			{
+				if (words[words.size() - 1].size() > tempResult.pairStr.size())
+				{
+					tempResult.odds.clear();
+					tempResult.pairStr.clear();
+					tempResult.pairStr = words[words.size() - 1];
+					tempResult.odds.insert(tempResult.odds.end(), tempResult.pairStr.size() + 1, make_pair(1, temp));
+					vector<int> usedSet;
+					usedSet.push_back(words.size() - 1);
+					for (int i = words.size() - 1; i >= 0; i--)
+					{
+						auto hasfound = find(usedSet.begin(), usedSet.end(), i);
+						if (hasfound != usedSet.end())
+						{
+							continue;
+						}
+						else
+						{
+							inputFrame.pairStr = words[i];
+							inputFrame.odds.insert(inputFrame.odds.end(), inputFrame.pairStr.size() + 1, make_pair(1, temp));
+							tempResult = GetUnionOfStrings(tempResult, inputFrame);
+							//if (tempResult.pairStr.empty())
+							//{
+
+							//}
+						}
+					}
+				}
+				else
+				{
+					inputFrame.pairStr = words[words.size() - 1];
+					inputFrame.odds.insert(inputFrame.odds.end(), inputFrame.pairStr.size() + 1, make_pair(1, temp));
+					tempResult = GetUnionOfStrings(tempResult, inputFrame);
+				}
+
+				string result = GetResult(tempResult);
+				cout << "\n" << "StringMix: ";
+				for (int j = 0; j < result.size(); j++)
+				{
+					cout << setw(3) << setiosflags(ios::left) << result[j];
+				}
+				cout << "\n" << "AnswerStr: ";
+				for (int j = 0; j < answer.size(); j++)
+				{
+					cout << setw(3) << setiosflags(ios::left) << answer[j];
+				}
+				cout << "\n";
+			}
+			else
+				continue;
+
+
+		}
 	}
-
-
-
-	MergeFrameResult threeFrame;
-	threeFrame.pairStr = string(str3);
-	vector<pair<int, string> > temp;
-	threeFrame.odds.insert(threeFrame.odds.end(), threeFrame.pairStr.size() + 1, make_pair(1, temp));
-	MergeFrameResult twoFrame;
-	twoFrame.pairStr = string(str2);
-	twoFrame.odds.insert(twoFrame.odds.end(), twoFrame.pairStr.size() + 1, make_pair(1, temp));
-	MergeFrameResult oneFrame;
-	oneFrame.pairStr = string(str1);
-	oneFrame.odds.insert(oneFrame.odds.end(), oneFrame.pairStr.size() + 1, make_pair(1, temp));
-	//threeFrame = GetUnionOfStrings(threeFrame, GetIntersectionOfStrings(str1, str2));
-	threeFrame = GetUnionOfStrings(threeFrame, GetUnionOfStrings(oneFrame, twoFrame));
-	//string result = GetResult(GetUnionOfStrings(oneFrame, twoFrame));
-	string result = GetResult(threeFrame);
-
-
-
-	cout << "StringOne: ";
-	for (int j = 0; j < strlen(str1); j++)
-	{
-		cout << setw(3) << setiosflags(ios::left) << str1[j];
-	}
-	cout << "\n" << "StringTwo: ";
-	for (int j = 0; j < strlen(str2); j++)
-	{
-		cout << setw(3) << setiosflags(ios::left) << str2[j];
-	}
-	cout << "\n" << "StringThr: ";
-	for (int j = 0; j < strlen(str3); j++)
-	{
-		cout << setw(3) << setiosflags(ios::left) << str3[j];
-	}
-	cout << "\n" << "StringMix: ";
-	for (int j = 0; j < result.size(); j++)
-	{
-		cout << setw(3) << setiosflags(ios::left) << result[j];
-	}
-
 	return 0;
 }
