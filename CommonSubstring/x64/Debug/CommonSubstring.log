@@ -1,18 +1,18 @@
 ﻿  FindCommonSubstring.cpp
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(538,9): warning C4244: 'initializing': conversion from '__int64' to 'int', possible loss of data
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(950,40): warning C4267: 'argument': conversion from 'size_t' to '_Ty', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(541,9): warning C4244: 'initializing': conversion from '__int64' to 'int', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(974,40): warning C4267: 'argument': conversion from 'size_t' to '_Ty', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(951,6): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(975,6): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include\utility(249,55): warning C4267: 'initializing': conversion from 'size_t' to '_Ty1', possible loss of data
           with
           [
               _Ty1=int
           ]
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(628): message : see reference to function template instantiation 'std::pair<int,int>::pair<unsigned __int64,unsigned __int64,0>(std::pair<unsigned __int64,unsigned __int64> &&) noexcept' being compiled
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(628): message : see reference to function template instantiation 'std::pair<int,int>::pair<unsigned __int64,unsigned __int64,0>(std::pair<unsigned __int64,unsigned __int64> &&) noexcept' being compiled
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(631): message : see reference to function template instantiation 'std::pair<int,int>::pair<unsigned __int64,unsigned __int64,0>(std::pair<unsigned __int64,unsigned __int64> &&) noexcept' being compiled
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(631): message : see reference to function template instantiation 'std::pair<int,int>::pair<unsigned __int64,unsigned __int64,0>(std::pair<unsigned __int64,unsigned __int64> &&) noexcept' being compiled
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include\utility(249,55): warning C4267: 'initializing': conversion from 'size_t' to '_Ty2', possible loss of data
           with
           [

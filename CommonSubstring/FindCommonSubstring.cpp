@@ -265,7 +265,8 @@ vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string 
 					}
 					for (int i = 0; i <= missCount; i++)
 					{
-						if (dp[pointY + i][pointX + missCount])
+						//if (dp[pointY + i][pointX + missCount])
+						if (dp[pointX + i][pointY + missCount])
 						{
 							int tempLength = 1;
 							while (pointX + i + tempLength < rows && pointY + missCount + tempLength < cols && dp[pointX + i + tempLength][pointY + missCount + tempLength])
@@ -477,7 +478,9 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 				}
 				else
 				{
-					vote[x].first = mainOdds[result[i].second + j - middleGap + 1].first;
+					//vote[x].first = mainOdds[result[i].second + j - result[i].second + result[i - 1].second + 2].first;
+					vote[x].first = mainOdds[result[i].second + j - result[i].second + result[i - 1].second + 1 + middleGap].first;
+					//vote[x].first = mainOdds[result[i].second + j - middleGap + 1].first;
 					str.push_back(str1[result[i].second - middleBiasGap + j]);
 				}
 			}
@@ -763,6 +766,7 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 string GetResult(MergeFrameResult frame)
 {
 	string& pairStr = frame.pairStr;
+	string result;
 	vector<pair<int, vector<pair<int, string> > > >odds = frame.odds;
 	for (int i = 0; i < pairStr.size(); i++)
 	{
@@ -779,10 +783,14 @@ string GetResult(MergeFrameResult frame)
 		}
 		if (float(odds[i + 1].first) < odds[0].first / 2.0 && odds[i + 1].second.empty())
 		{
-			pairStr.erase(i, 1);
+			//pairStr.erase(i, 1);
+		}
+		else
+		{
+			result.push_back(pairStr[i]);
 		}
 	}
-	return pairStr;
+	return result;
 }
 
 //MergeFrameResult GetIntersectionOfStrings(const string str1, const string str2)
@@ -927,13 +935,29 @@ int main()
 	string answer;
 	string line;
 	int maxIndex = -1;
-
+	int frameSize = 5;
 	vector<pair<int, string> > temp;
 	MergeFrameResult tempResult;
+	string result;
 	while (getline(f, line))
 	{
 		if (words.empty() && answer.empty())
 			answer = line;
+		else if (line.empty())
+		{
+			if (answer == result)
+			{
+				printf("Success\n");
+				words.clear();
+				answer.clear();
+			}
+			else
+			{
+				printf("fail\n");
+				words.clear();
+				answer.clear();
+			}
+		}
 		else
 		{
 			words.push_back(line);
@@ -957,6 +981,7 @@ int main()
 						}
 						else
 						{
+							inputFrame.odds.clear();
 							inputFrame.pairStr = words[i];
 							inputFrame.odds.insert(inputFrame.odds.end(), inputFrame.pairStr.size() + 1, make_pair(1, temp));
 							tempResult = GetUnionOfStrings(tempResult, inputFrame);
@@ -974,7 +999,7 @@ int main()
 					tempResult = GetUnionOfStrings(tempResult, inputFrame);
 				}
 
-				string result = GetResult(tempResult);
+				result = GetResult(tempResult);
 				cout << "\n" << "StringMix: ";
 				for (int j = 0; j < result.size(); j++)
 				{
