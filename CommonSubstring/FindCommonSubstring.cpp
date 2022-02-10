@@ -65,8 +65,8 @@ vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string 
 		{
 			missCount = 1;
 			result.push_back(make_pair(pointX, pointY));
-			int probeX = tlPoint.first + 1;
-			int probeY = tlPoint.second + 1;
+			int probeX = pointX + 1;
+			int probeY = pointY + 1;
 			int probeLength = 1;
 
 			if (probeX < rows && probeY < cols && dp[probeX][probeY])
@@ -144,7 +144,7 @@ vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string 
 
 						if (!(rightprobeX < rows && rightprobeY < cols))
 							breakFlag = 1;
-						for (; rightLength > 0; rightLength--, i++, j++)
+						for (; rightLength > 0; --rightLength, i++, j++)
 							result.push_back(make_pair(i, j));
 
 						pointX = rightprobeX;
@@ -394,33 +394,91 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 			int headBiasGap = result[0].first < result[0].second ? result[0].second : result[0].first;
 			headBiasGap -= headGap;
 			vector<pair<int, string> >tempString;
-			for (int j = 0; j < headGap; j++, x++)
+			//for (int j = 0; j < headGap; j++, x++)
+			//{
+			//	//if (j == 0)
+			//	//{
+			//	//	for (int k = 0; k < (result[0].second - headGap); k++, x++)
+			//	//	{
+			//	//		vote[x].first = mainOdds[result[i].second + j - result[i].second + result[i - 1].second + 1 ].first;
+			//	//		//vote[x].first = mainOdds[result[i].second + j - middleGap + 1].first;
+			//	//		str.push_back(str1[result[i].second - j]);
+			//	//	}
+			//	//	continue;
+			//	//}
+
+			//	str.push_back('*');
+			//	string char1(1, str1[result[i].second - j - 1]);
+			//	string char2(1, str2[result[i].first - j - 1]);
+			//	if (str1[result[i].second - j - 1] == '*' || str2[result[i].second - j - 1] == '*')
+			//	{
+			//		if (str1[result[i].second - j - 1] == '*')
+			//			vote[x].second.push_back(make_pair(tempOdds[result[i].first - j].first, revise + char2));
+			//		else if (str2[result[i].second - j - 1] == '*')
+			//			vote[x].second.push_back(make_pair(mainOdds[result[i].first - j].first, revise + char1));
+			//	}
+			//	else
+			//	{
+			//		vote[x].second.push_back(make_pair(mainOdds[result[i].second - j].first, revise + char1));
+			//		vote[x].second.push_back(make_pair(tempOdds[result[i].first - j].first, revise + char2));
+			//	}
+			//	vote[x].second.insert(vote[x].second.end(), mainOdds[result[i].second - j].second.begin(), mainOdds[result[i].second - j].second.end());
+			//	vote[x].second.insert(vote[x].second.end(), tempOdds[result[i].first - j].second.begin(), tempOdds[result[i].first - j].second.end());
+			//}
+
+			//for (int j = 0; j < headBiasGap; j++, x++)
+			//{
+			//	vote[x].first = mainOdds[result[0].second - headBiasGap + j + 1].first;
+			//	str.push_back(str1[result[0].second - headBiasGap + j]);
+			//}
+
+			string count;
+			for (int j = 0; j < headBiasGap; j++)
 			{
-				str.push_back('*');
-				string char1(1, str1[result[i].second - j - 1]);
-				string char2(1, str2[result[i].first - j - 1]);
-				if (str1[result[i].second - j - 1] == '*' || str2[result[i].second - j - 1] == '*')
+				if (result[0].first > result[0].second)
 				{
-					if (str1[result[i].second - j - 1] == '*')
-						vote[x].second.push_back(make_pair(tempOdds[result[i].first - j].first, revise + char2));
-					else if (str2[result[i].second - j - 1] == '*')
-						vote[x].second.push_back(make_pair(mainOdds[result[i].first - j].first, revise + char1));
+					if (j == 0)
+						vote[0].second.push_back(make_pair(0, add));
+					vote[0].second.back().second.push_back(str2[result[0].first - headBiasGap + j]);
+					count.push_back(tempOdds[result[0].first - headBiasGap + j + 1].first + '0');
 				}
 				else
 				{
-					vote[x].second.push_back(make_pair(mainOdds[result[i].second - j].first, revise + char1));
-					vote[x].second.push_back(make_pair(tempOdds[result[i].first - j].first, revise + char2));
+					vote[x].first = mainOdds[j + 1].first;
+					vote[x].second = mainOdds[j + 1].second;
+					str.push_back(str1[j]);
+					x++;
 				}
-				vote[x].second.insert(vote[x].second.end(), mainOdds[result[i].second - j].second.begin(), mainOdds[result[i].second - j].second.end());
-				vote[x].second.insert(vote[x].second.end(), tempOdds[result[i].first - j].second.begin(), tempOdds[result[i].first - j].second.end());
 			}
-			string count;
-			for (int j = 0; j < headBiasGap; j++, x++)
+			if (result[0].first > result[0].second)
 			{
-				vote[x].first = mainOdds[result[0].second - headBiasGap + j + 1].first;
-				str.push_back(str1[result[0].second - headBiasGap + j]);
+				vote[0].second.back().first = atoi(count.c_str());
 			}
-			if (result[i].second - 1 >= 0 && result[i].first - 1 >= 0 && !(str1[result[i].second - 1] == '*' || str2[result[i].second - 1] == '*'))
+
+			for (int j = 0; j < headGap; j++, x++)
+			{
+				str.push_back('*');
+				string char1(1, str1[result[i].second - headGap + j ]);
+				string char2(1, str2[result[i].first - headGap + j]);
+				if (str1[result[i].second - headGap + j] == '*' || str2[result[i].second - headGap + j] == '*')
+				{
+					if (str1[result[i].second - headGap + j] == '*')
+						vote[x].second.push_back(make_pair(tempOdds[result[i].first - headGap + j+1].first, revise + char2));
+					else if (str2[result[i].first - headGap + j] == '*')
+						vote[x].second.push_back(make_pair(mainOdds[result[i].first - headGap + j+1].first, revise + char1));
+					vote[x].second.insert(vote[x].second.end(), mainOdds[result[i].second - headGap + j+1].second.begin(), mainOdds[result[i].second - headGap + j+1].second.end());
+					vote[x].second.insert(vote[x].second.end(), tempOdds[result[i].first - headGap + j+1].second.begin(), tempOdds[result[i].first - headGap + j+1].second.end());
+				}
+				else
+				{
+					vote[x].second.push_back(make_pair(mainOdds[result[i].second - headGap + j + 1].first, revise + char1));
+					vote[x].second.push_back(make_pair(tempOdds[result[i].first - headGap + j + 1].first, revise + char2));
+					vote[x].second.insert(vote[x].second.end(), mainOdds[result[i].second - headGap + j + 1].second.begin(), mainOdds[result[i].second - headGap + j + 1].second.end());
+					vote[x].second.insert(vote[x].second.end(), tempOdds[result[i].first - headGap + j + 1].second.begin(), tempOdds[result[i].first - headGap + j + 1].second.end());
+				}
+			}
+
+			if (result[i].second - 1 >= 0 && result[i].first - 1 >= 0 && !(str1[result[i].second - 1] == '*' || str2[result[i].second - 1] == '*')|| (result[i].first> result[i].second))
 			{
 				vote[0].second.insert(vote[0].second.end(), mainOdds[result[0].second].second.begin(), mainOdds[result[0].second].second.end());
 				vote[0].second.insert(vote[0].second.end(), tempOdds[result[0].first].second.begin(), tempOdds[result[0].first].second.end());
@@ -433,7 +491,6 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 			vote[x].first = mainOdds[result[i].second + 1].first + tempOdds[result[i].first + 1].first;
 			vote[x].second.insert(vote[x].second.end(), mainOdds[result[i].second + 1].second.begin(), mainOdds[result[i].second + 1].second.end());
 			vote[x].second.insert(vote[x].second.end(), tempOdds[result[i].first + 1].second.begin(), tempOdds[result[i].first + 1].second.end());
-
 		}
 		else
 		{
@@ -461,7 +518,7 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 				vote[x].second.insert(vote[x].second.end(), tempOdds[result[i - 1].first + j + 2].second.begin(), tempOdds[result[i - 1].first + j + 2].second.end());
 			}
 			string count;
-			for (int j = 0; j < middleBiasGap; j++, x++)
+			for (int j = 0; j < middleBiasGap; j++)
 			{
 				if (result[i].first - result[i - 1].first > result[i].second - result[i - 1].second)
 				{
@@ -474,14 +531,15 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 						vote[x - 1].second.back().first = atoi(count.c_str());
 						x--;
 					}
-
 				}
 				else
 				{
 					//vote[x].first = mainOdds[result[i].second + j - result[i].second + result[i - 1].second + 2].first;
 					vote[x].first = mainOdds[result[i].second + j - result[i].second + result[i - 1].second + 1 + middleGap].first;
+					vote[x].second = mainOdds[result[i].second + j - result[i].second + result[i - 1].second + 1 + middleGap].second;
 					//vote[x].first = mainOdds[result[i].second + j - middleGap + 1].first;
 					str.push_back(str1[result[i].second - middleBiasGap + j]);
+					x++;
 				}
 			}
 			str.push_back(str1[result[i].second]);
@@ -517,12 +575,39 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 				vote[x].second.insert(vote[x].second.end(), mainOdds[result[i].second + j + 2].second.begin(), mainOdds[result[i].second + j + 2].second.end());
 				vote[x].second.insert(vote[x].second.end(), tempOdds[result[i].first + j + 2].second.begin(), tempOdds[result[i].first + j + 2].second.end());
 			}
-			string count;
-			for (int j = 0; j < lastBiasGap; j++, x++)
+
+			//for (int j = 0; j < lastBiasGap; j++, x++)
+			//{
+			//	vote[x].first = mainOdds[result[i].second + j + lastGap + 1].first;
+			//	str.push_back(str1[result[i].second + j + lastGap]);
+			//}
+			if (x == str1.size()+1)
 			{
-				vote[x].first = mainOdds[result[i].second + j + lastGap + 1].first;
-				str.push_back(str1[result[i].second + j + lastGap]);
+				x--;
 			}
+			string count;
+			for (int j = 0; j < lastBiasGap; j++)
+			{
+				if (length2 - result[i].first > length1 - result[i].second)
+				{
+					if (j == 0)
+						vote[x].second.push_back(make_pair(0, add));
+					vote[x].second.back().second.push_back(str2[result[i].first + j + 1]);
+					count.push_back(tempOdds[result[i].first + j + 2].first + '0');
+				}
+				else
+				{
+					vote[x].first = mainOdds[result[i].second + j + lastGap + 1].first;
+					vote[x].second = mainOdds[result[i].second + j + lastGap + 1].second;
+					str.push_back(str1[result[i].second + j + lastGap]);
+					x++;
+				}
+			}
+			if (length2 - result[i].first > length1 - result[i].second)
+			{
+				vote[x].second.back().first = atoi(count.c_str());
+			}
+
 		}
 	}
 
@@ -774,14 +859,16 @@ string GetResult(MergeFrameResult frame)
 		{
 			for (auto start = odds[i + 1].second.begin(); start != odds[i + 1].second.end(); ++start)
 			{
-				if (start->second[0] == '*')
+				if (start->second[0] == '*' )
 				{
 					pairStr[i] = start->second[1];
+					odds[i + 1].first = start->first;
+					odds[i + 1].second.erase(start);
 					break;
 				}
 			}
 		}
-		if (float(odds[i + 1].first) < odds[0].first / 2.0 && odds[i + 1].second.empty())
+		if (float(odds[i + 1].first) < odds[0].first / 2.0 /* && odds[i + 1].second.empty()*/)
 		{
 			//pairStr.erase(i, 1);
 		}
@@ -947,12 +1034,16 @@ int main()
 		{
 			if (answer == result)
 			{
+				tempResult.odds.clear();
+				tempResult.pairStr.clear();
 				printf("Success\n");
 				words.clear();
 				answer.clear();
 			}
 			else
 			{
+				tempResult.odds.clear();
+				tempResult.pairStr.clear();
 				printf("fail\n");
 				words.clear();
 				answer.clear();
@@ -985,10 +1076,6 @@ int main()
 							inputFrame.pairStr = words[i];
 							inputFrame.odds.insert(inputFrame.odds.end(), inputFrame.pairStr.size() + 1, make_pair(1, temp));
 							tempResult = GetUnionOfStrings(tempResult, inputFrame);
-							//if (tempResult.pairStr.empty())
-							//{
-
-							//}
 						}
 					}
 				}
