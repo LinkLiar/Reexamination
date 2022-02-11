@@ -1,19 +1,21 @@
 from os import error
 import random
 import string
-maxSize = 40
+maxSize = 30
 generateTime = 1000
 characters = string.ascii_uppercase + string.digits + string.ascii_lowercase
 f = open('sample.txt', 'w')
 def GenerateRandomStrings(count , char):    # 字符串错误量不超过正确结果字数的1/4
     for i in range(0 , count):
-        size = random.randint(1, maxSize)
+        size = random.randint(6, maxSize)
         tempRaw = ''.join(random.sample(characters,size))
         f.write(tempRaw + '\n')
         tempRaw = list(tempRaw)
+        print("correct:" + str(size))
         for _ in range(0,5):
             temp = tempRaw.copy()
-            errorTime = random.randint(0, int(len(temp) / 4))
+            errorTime = random.randint(0, int(size/6))
+            print("correct:" + str(size))
             pos = []
             for _ in range(0, errorTime):
                 if(len(temp) != 1):
