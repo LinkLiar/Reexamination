@@ -49,7 +49,6 @@ vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string 
 	//	cout << "\n";
 	//}
 
-
 	for (int i = 0; i < length2; i++)
 	{
 		for (int j = 0; j < length1; j++)
@@ -253,7 +252,6 @@ vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string 
 					missCountMax = missCount;
 					if (missCount > min(brPoint.first - tlPoint.first, brPoint.second - tlPoint.second) / 2)
 						return {};
-					//if (!(pointX + missCount < rows && pointY + missCount < cols))
 					if (!(pointX + missCount < rows || pointY + missCount < cols))
 						break;
 					int bottomMax = 0;
@@ -418,7 +416,6 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 				{
 					if (j == 0)
 						vote[0].second.push_back(make_pair(0, add));
-					//vote[0].second.back().second.push_back(str2[result[0].first - headBiasGap + j]);
 					vote[0].second.back().second.push_back(str2[j]);
 					count.push_back(tempOdds[result[0].first - headBiasGap + j + 1].first + '0');
 				}
@@ -505,7 +502,7 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 					if (j == 0)
 						vote[x - 1].second.push_back(make_pair(0, add));
 					vote[x - 1].second.back().second.push_back(str2[result[i].first - middleBiasGap + j]);
-					count.push_back(tempOdds[result[i-1].first + j + middleGap].first + '0');
+					count.push_back(tempOdds[result[i - 1].first + j + middleGap].first + '0');
 					if (j == middleBiasGap - 1)
 					{
 						vote[x - 1].second.back().first = atoi(count.c_str());
@@ -548,7 +545,6 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 					vote[x].second.push_back(make_pair(mainOdds[result[i].second + j + 2].first, revise + char1));
 					vote[x].second.push_back(make_pair(tempOdds[result[i].first + j + 2].first, revise + char2));
 				}
-				//vote[x].first = mainOdds[result[i].second + j + 2].first;
 				vote[x].second.insert(vote[x].second.end(), mainOdds[result[i].second + j + 2].second.begin(), mainOdds[result[i].second + j + 2].second.end());
 				vote[x].second.insert(vote[x].second.end(), tempOdds[result[i].first + j + 2].second.begin(), tempOdds[result[i].first + j + 2].second.end());
 			}
@@ -773,9 +769,9 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 						{
 							addTime++;
 							str.insert(iterStr + 1, final.second[i]);
-							if(final.second.size()!=1 && i!= final.second.size()-1)
+							if (final.second.size() != 1 && i != final.second.size() - 1)
 								iterStr++;
-							if(final.second.size() != 1 && i == final.second.size() - 1)
+							if (final.second.size() != 1 && i == final.second.size() - 1 && addTime != 1)
 								iterStr--;
 							iterOdds = vote.insert(++iterOdds, make_pair(final.first[i] - '0', dummy));
 						}
@@ -824,7 +820,7 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 		}
 		if (iterOdds != vote.begin() && iterStr != str.end())
 		{
-			iterStr++;
+			++iterStr;
 		}
 	}
 	fusionResult.odds = vote;
@@ -832,11 +828,16 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 	return fusionResult;
 }
 
-string GetResult(MergeFrameResult &frame)
+string GetResult(MergeFrameResult& frame)
 {
 	string& pairStr = frame.pairStr;
+	pairStr.reserve(2 * pairStr.size());
+	vector<pair<int, vector<pair<int, string> > > >& odds = frame.odds;
+	odds.reserve(2 * odds.size());
+
 	string result;
-	vector<pair<int, vector<pair<int, string> > > >&odds = frame.odds;
+	vector<pair<int, vector<pair<int, string> > > >newOdds;
+
 	for (int i = 0; i < pairStr.size(); i++)
 	{
 		if (pairStr[i] == '*')
@@ -857,9 +858,8 @@ string GetResult(MergeFrameResult &frame)
 			pairStr[i] = odds[i + 1].second[maxID].second[1];
 			odds[i + 1].first = odds[i + 1].second[maxID].first;
 			odds[i + 1].second.erase(odds[i + 1].second.begin() + maxID);
-
 		}
-		if (float(odds[i + 1].first) < odds[0].first / 2.0)
+		if (float(odds[i + 1].first) < odds[0].first / 2.0 )
 		{
 			int breakFlag = 0;
 			for (auto start = odds[i].second.begin(); start != odds[i].second.end(); )
@@ -872,13 +872,13 @@ string GetResult(MergeFrameResult &frame)
 					result.push_back(pairStr[i]);
 				}
 				else
-					start++;
+					++start;
 			}
-			if (!breakFlag && i + 2 < odds.size()-1)
+			if (!breakFlag && i + 2 < odds.size())
 			{
 				for (auto start = odds[i + 2].second.begin(); start != odds[i + 2].second.end(); )
 				{
-					if (start->second[1] == pairStr[i] && (odds[i + 2].first + start->first) > odds[0].first / 2.0)
+					if (start->second[1] == pairStr[i] && (odds[i + 1].first + start->first) > odds[0].first / 2.0)
 					{
 						breakFlag = 1;
 						odds[i + 2].first = odds[i + 2].first + start->first;
@@ -886,7 +886,7 @@ string GetResult(MergeFrameResult &frame)
 						result.push_back(pairStr[i]);
 					}
 					else
-						start++;
+						++start;
 				}
 			}
 			if (!breakFlag)
@@ -901,13 +901,182 @@ string GetResult(MergeFrameResult &frame)
 						result.push_back(pairStr[i]);
 					}
 					else
-						start++;
+						++start;
 				}
 			}
 		}
 		else
 		{
 			result.push_back(pairStr[i]);
+		}
+		odds[i + 1].second.reserve(2 * odds[i + 1].second.size());
+		for (auto start = odds[i + 1].second.begin(); start != odds[i + 1].second.end(); ++start)
+		{
+			if (start->second[0] == '+' && start->first == odds[0].first / 2)
+			{
+				vector<int> erasePositionLast;
+				vector<int> erasePositionNow;
+				vector<int> erasePositionNext;
+				int tempVoteNum = start->first;
+				for (int j = 0; j < odds[i].second.size(); j++)
+				{
+					if (odds[i].second[j].second[1] == start->second[1])
+					{
+						erasePositionLast.push_back(j);
+						tempVoteNum += odds[i].second[j].first;
+					}
+				}
+				for (int k = 0; k < odds[i + 1].second.size(); k++)
+				{
+					if (odds[i + 1].second[k].second[1] == start->second[1] && odds[i + 1].second[k].second[0] == '*')
+					{
+						erasePositionNow.push_back(k);
+						tempVoteNum += odds[i + 1].second[k].first;
+					}
+				}
+				if (i + 2 < odds.size())
+				{
+					for (int l = 0; l < odds[i + 2].second.size(); l++)
+					{
+						if (odds[i + 2].second[l].second[1] == start->second[1])
+						{
+							erasePositionNext.push_back(l);
+							tempVoteNum += odds[i + 2].second[l].first;
+						}
+					}
+				}
+				if (tempVoteNum > odds[0].first / 2)
+				{
+					pairStr.insert(pairStr.begin() + i + 1, start->second[1]);
+					erasePositionNow.push_back(start - odds[i + 1].second.begin());
+					for (int e1 = 0; e1 < erasePositionLast.size(); e1++)
+					{
+						odds[i].second.erase(odds[i].second.begin() + erasePositionLast[erasePositionLast.size() - e1 - 1]);
+					}
+					for (int e2 = 0; e2 < erasePositionNow.size(); e2++)
+					{
+						odds[i + 1].second.erase(odds[i + 1].second.begin() + erasePositionNow[erasePositionNow.size() - e2 - 1]);
+					}
+					if (i + 2 < odds.size())
+					{
+						for (int e3 = 0; e3 < erasePositionNext.size(); e3++)
+						{
+							odds[i + 2].second.erase(odds[i + 2].second.begin() + erasePositionNext[erasePositionNext.size() - e3 - 1]);
+						}
+					}
+					vector<pair<int, string> > dummy;
+					odds.insert(odds.begin() + i + 2, make_pair(tempVoteNum, dummy));
+					break;
+				}
+			}
+			else if(start->second[0] == '+' && start->first > odds[0].first / 2)
+			{
+				vector<int> erasePositionLast;
+				vector<int> erasePositionNow;
+				vector<int> erasePositionNext;
+
+				string firstStr = to_string(start->first);
+				int position = -1;
+				for (int p = 0; p < firstStr.size(); p++)
+				{
+					if (firstStr[p] - '0' == odds[0].first / 2)
+					{
+						position = p;
+						break;
+					}
+				}
+				if (position == -1)
+					break;
+				
+				int tempVoteNum = firstStr[position] - '0';
+				for (int j = 0; j < odds[i].second.size(); j++)
+				{
+					if (odds[i].second[j].second[1] == start->second[position + 1])
+					{
+						erasePositionLast.push_back(j);
+						tempVoteNum += odds[i].second[j].first;
+					}
+				}
+				for (int k = 0; k < odds[i + 1].second.size(); k++)
+				{
+					if (odds[i + 1].second[k].second[1] == start->second[position + 1] && odds[i + 1].second[k].second[0] == '*')
+					{
+						erasePositionNow.push_back(k);
+						tempVoteNum += odds[i + 1].second[k].first;
+					}
+				}
+				if (i + 2 < odds.size())
+				{
+					for (int l = 0; l < odds[i + 2].second.size(); l++)
+					{
+						if (odds[i + 2].second[l].second[1] == start->second[position + 1])
+						{
+							erasePositionNext.push_back(l);
+							tempVoteNum += odds[i + 2].second[l].first;
+						}
+					}
+				}
+				if (tempVoteNum > odds[0].first / 2)
+				{
+					pairStr.insert(pairStr.begin() + i + 1, start->second[position + 1]);
+					string countLast;
+					string countNow;
+					pair<int, string> dummyPair;
+					for (int p = 0; p < firstStr.size(); p++)
+					{
+						if (p < position)
+						{
+							if (p == 0)
+							{
+								odds[i+1].second.push_back(dummyPair);
+								odds[i+1].second.back().second.push_back('+');
+							}
+							countLast.push_back(firstStr[p]);
+							odds[i+1].second.back().second.push_back(start->second[p + 1]);
+						}
+						else if (p == position)
+						{
+							odds[i+1].second.back().first = atoi(countLast.c_str());
+						}
+						else if (p > position)
+						{
+							if (p == position + 1)
+							{
+								dummyPair.second.push_back('+');
+							}
+							countNow.push_back(firstStr[p]);
+							dummyPair.second.push_back(start->second[p + 1]);
+							if (p == firstStr.size() - 1)
+							{
+								dummyPair.first = atoi(countNow.c_str());
+							}
+						}
+					}
+
+					erasePositionNow.push_back(start - odds[i + 1].second.begin());
+					for (int e1 = 0; e1 < erasePositionLast.size(); e1++)
+					{
+						odds[i].second.erase(odds[i].second.begin() + erasePositionLast[erasePositionLast.size() - e1 - 1]);
+					}
+					for (int e2 = 0; e2 < erasePositionNow.size(); e2++)
+					{
+						odds[i + 1].second.erase(odds[i + 1].second.begin() + erasePositionNow[erasePositionNow.size() - e2 - 1]);
+					}
+					if (i + 2 < odds.size())
+					{
+						for (int e3 = 0; e3 < erasePositionNext.size(); e3++)
+						{
+							odds[i + 2].second.erase(odds[i + 2].second.begin() + erasePositionNext[erasePositionNext.size() - e3 - 1]);
+						}
+					}
+					vector<pair<int, string> > dummy;
+					if(dummyPair.first != 0)
+						dummy.push_back(dummyPair);
+					odds.insert(odds.begin() + i + 2, make_pair(tempVoteNum, dummy));
+
+					break;
+				}
+			}
 		}
 	}
 	return result;
@@ -919,7 +1088,6 @@ int main()
 	vector<string> words;
 	string answer;
 	string line;
-	int maxIndex = -1;
 	int frameSize = 5;
 	vector<pair<int, string> > temp;
 	MergeFrameResult tempResult;

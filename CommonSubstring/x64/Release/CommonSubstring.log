@@ -1,8 +1,31 @@
-﻿  GrowCommonSubstring.cpp
-  SearchCommonSubstring.cpp
+﻿  FindCommonSubstring.cpp
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(594,9): warning C4244: 'initializing': conversion from '__int64' to 'int', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(951,39): warning C4244: 'argument': conversion from '__int64' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(1023,40): warning C4267: 'argument': conversion from 'size_t' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(1024,6): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include\utility(249,55): warning C4267: 'initializing': conversion from 'size_t' to '_Ty1', possible loss of data
+          with
+          [
+              _Ty1=int
+          ]
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(685): message : see reference to function template instantiation 'std::pair<int,int>::pair<unsigned __int64,unsigned __int64,0>(std::pair<unsigned __int64,unsigned __int64> &&) noexcept' being compiled
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(685): message : see reference to function template instantiation 'std::pair<int,int>::pair<unsigned __int64,unsigned __int64,0>(std::pair<unsigned __int64,unsigned __int64> &&) noexcept' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include\utility(249,55): warning C4267: 'initializing': conversion from 'size_t' to '_Ty2', possible loss of data
+          with
+          [
+              _Ty2=int
+          ]
   Generating code
-  386 of 518 functions (74.5%) were compiled, the rest were copied from previous compilation.
-    335 functions were new in current compilation
-    26 functions had inline decision re-evaluated but remain unchanged
+  16 of 774 functions ( 2.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    8 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   CommonSubstring.vcxproj -> C:\Users\Link\source\repos\CommonSubstring\x64\Release\CommonSubstring.exe
