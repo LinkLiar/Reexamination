@@ -1,31 +1,31 @@
 ﻿  FindCommonSubstring.cpp
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(594,9): warning C4244: 'initializing': conversion from '__int64' to 'int', possible loss of data
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(951,39): warning C4244: 'argument': conversion from '__int64' to '_Ty', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(595,9): warning C4244: 'initializing': conversion from '__int64' to 'int', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(935,39): warning C4244: 'argument': conversion from '__int64' to '_Ty', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(1023,40): warning C4267: 'argument': conversion from 'size_t' to '_Ty', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(1040,39): warning C4244: 'argument': conversion from '__int64' to '_Ty', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(1024,6): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include\utility(249,55): warning C4267: 'initializing': conversion from 'size_t' to '_Ty1', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(1095,36): error C2664: 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(std::initializer_list<_Elem>,const _Alloc &)': cannot convert argument 1 from 'int' to 'std::initializer_list<_Elem>'
           with
           [
-              _Ty1=int
+              _Elem=char,
+              _Alloc=std::allocator<char>
           ]
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(685): message : see reference to function template instantiation 'std::pair<int,int>::pair<unsigned __int64,unsigned __int64,0>(std::pair<unsigned __int64,unsigned __int64> &&) noexcept' being compiled
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(685): message : see reference to function template instantiation 'std::pair<int,int>::pair<unsigned __int64,unsigned __int64,0>(std::pair<unsigned __int64,unsigned __int64> &&) noexcept' being compiled
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include\utility(249,55): warning C4267: 'initializing': conversion from 'size_t' to '_Ty2', possible loss of data
+          and
+          [
+              _Elem=char
+          ]
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(1095,36): message : No constructor could take the source type, or constructor overload resolution was ambiguous
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include\xstring(2956,5): message : see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string'
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(1167,40): warning C4267: 'argument': conversion from 'size_t' to '_Ty', possible loss of data
           with
           [
-              _Ty2=int
+              _Ty=int
           ]
-  Generating code
-  16 of 774 functions ( 2.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    8 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  CommonSubstring.vcxproj -> C:\Users\Link\source\repos\CommonSubstring\x64\Release\CommonSubstring.exe
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(1168,6): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(1207,37): warning C4267: '+=': conversion from 'size_t' to 'int', possible loss of data
