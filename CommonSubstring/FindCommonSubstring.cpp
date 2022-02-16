@@ -8,7 +8,6 @@
 #include <fstream>
 #include <time.h>
 
-#define SIZE 5
 using namespace std;
 
 typedef struct
@@ -366,7 +365,7 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 {
 	MergeFrameResult fusionResult;
 	if (mergedResult1.pairStr.empty() || mergedResult2.pairStr.empty())
-		return fusionResult;
+		return {};
 
 	string str1 = mergedResult1.pairStr;
 	string str2 = mergedResult2.pairStr;
@@ -390,7 +389,8 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 	str.reserve(2 * str1.size());
 
 	vector<pair<int, int> >result = GetIntersectionOfMatrix(str1, str2, make_pair(0, 0), make_pair(length2 - 1, length1 - 1), mainOdds, tempOdds);
-
+	if (result.size() < str2.size() / 2)
+		return {};
 	vector<pair<int, vector<pair<int, string> > > >vote;
 	vector<pair<int, string> > dummyOdds;
 	vote.insert(vote.end(), (max(str1.size(), str2.size()) + 1), make_pair(0, dummyOdds));
@@ -762,28 +762,28 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 						}
 						else
 						{
+							//addTime++;
+							//str.insert(iterStr + 1, final.second[i]);
+							//if (final.second.size() != 1 && i != final.second.size() - 1)
+							//	iterStr++;
+							//if (final.second.size() != 1 && i == final.second.size() - 1 && addTime != 1)
+							//	iterStr--;
+							//iterOdds = vote.insert(++iterOdds, make_pair(final.first[i] - '0', dummyOdds));
+							str.insert(iterStr + 1 + addTime, final.second[i]);
 							addTime++;
-							str.insert(iterStr + 1, final.second[i]);
-							if (final.second.size() != 1 && i != final.second.size() - 1)
-								iterStr++;
-							if (final.second.size() != 1 && i == final.second.size() - 1 && addTime != 1)
-								iterStr--;
 							iterOdds = vote.insert(++iterOdds, make_pair(final.first[i] - '0', dummyOdds));
 						}
 					}
 					else
 					{
-
 						if (!hasCreated)
 						{
 							iterOdds->second.push_back(make_pair(0, ""));
 							hasCreated = 1;
 							iterOdds->second.back().second.push_back('+');
 						}
-
 						iterOdds->second.back().second.push_back(final.second[i]);
 						tempFirst.push_back(final.first[i]);
-
 					}
 				}
 				if (tempFirst.size() != 0)
@@ -1066,25 +1066,19 @@ string GetResult(MergeFrameResult& frame)
 	return result;
 }
 
-string CombineStringResult(string inputStr)
-{
-	static vector<string> words;
-	words.reserve(SIZE);
-
-	return {};
-}
-
 class CombineTextResult
 {
 public:
 	void SetQueueSize(int size);
 	string CombineString(string input);
 	void FreeQueue();
+
 private:
-	int m_queueSize;
+	int m_queueSize = 0;
 	string* m_pResultQueue = NULL;
 	int m_QueueFront = 0;
-	int m_QueueRear = 0;
+	int m_QueueRear = -1;
+	MergeFrameResult m_tempResult;
 };
 
 void CombineTextResult::SetQueueSize(int size)
@@ -1098,23 +1092,132 @@ void CombineTextResult::SetQueueSize(int size)
 
 void CombineTextResult::FreeQueue()
 {
-
+	m_queueSize = 0;
+	if (m_pResultQueue == NULL)
+	{
+		delete m_pResultQueue;
+	}
 }
 
-string CombineTextResult::CombineString(string input)
+string CombineTextResult::CombineString(const string inputStr)
 {
+	if (m_pResultQueue == NULL || m_queueSize == 0 || inputStr.empty())
+		return {};
 
+	if ((m_QueueRear + 1 + m_queueSize) % m_queueSize == m_QueueFront && m_QueueRear != -1)
+	{
+		m_QueueFront = (m_QueueFront + 1 + m_queueSize) % m_queueSize;
+	}
+
+	m_QueueRear = (m_QueueRear + 1 + m_queueSize) % m_queueSize;
+	*(m_pResultQueue + m_QueueRear) = inputStr;
+
+	int existSize = 1;
+	for (int i = (m_QueueRear - 1 + m_queueSize) % m_queueSize; i != m_QueueRear; i = (i - 1 + m_queueSize) % m_queueSize)
+	{
+		if ((m_pResultQueue + i)->size() == 0)
+			break;
+		else
+			++existSize;
+	}
+
+	vector<pair<int, string> > dummyOdds;
+	MergeFrameResult inputFrame;
+	string result;
+	if (existSize > 1)
+	{
+		if ((m_pResultQueue + m_QueueRear)->size() > m_tempResult.pairStr.size() || m_tempResult.odds[0].first == m_queueSize)
+		{
+			m_tempResult.odds.clear();
+			m_tempResult.pairStr.clear();
+			int longestId = -1;
+			int longest = 0;
+
+			for (int i = m_QueueRear; ; i = (i - 1 + m_queueSize) % m_queueSize)
+			{
+				if ((m_pResultQueue + i)->size() > longest)
+				{
+					longestId = i;
+					longest = (m_pResultQueue + i)->size();
+				}
+				if (i == m_QueueFront)
+					break;
+			}
+
+			m_tempResult.pairStr = *(m_pResultQueue + longestId);
+			m_tempResult.odds.insert(m_tempResult.odds.end(), m_tempResult.pairStr.size() + 1, make_pair(1, dummyOdds));
+
+			for (int i = m_QueueRear; ; i = (i - 1 + m_queueSize) % m_queueSize)
+			{
+				if (i == longestId)
+				{
+					if (i == m_QueueFront)
+						break;
+					continue;
+				}
+				inputFrame.odds.clear();
+				inputFrame.pairStr = *(m_pResultQueue + i);
+				inputFrame.odds.insert(inputFrame.odds.end(), inputFrame.pairStr.size() + 1, make_pair(1, dummyOdds));
+				m_tempResult = GetUnionOfStrings(m_tempResult, inputFrame);
+
+				if (m_tempResult.pairStr.size() == 0)
+				{
+					m_tempResult.odds.clear();
+					m_tempResult.pairStr.clear();
+					for (int e = 0; e < m_queueSize; e++)
+					{
+						if (e != m_QueueRear && (m_pResultQueue + e)->size() != 0)
+							(m_pResultQueue + e)->clear();
+					}
+					m_QueueFront = m_QueueRear;
+					m_tempResult.pairStr = *(m_pResultQueue + m_QueueRear);
+					m_tempResult.odds.insert(m_tempResult.odds.end(), m_tempResult.pairStr.size() + 1, make_pair(1, dummyOdds));
+					result = inputStr;
+					return result;
+				}
+
+				if (i == m_QueueFront)
+					break;
+			}
+		}
+		else
+		{
+			inputFrame.pairStr = *(m_pResultQueue + m_QueueRear);
+			inputFrame.odds.insert(inputFrame.odds.end(), inputFrame.pairStr.size() + 1, make_pair(1, dummyOdds));
+			m_tempResult = GetUnionOfStrings(m_tempResult, inputFrame);
+			if (m_tempResult.pairStr.size() == 0)
+			{
+				m_tempResult.odds.clear();
+				m_tempResult.pairStr.clear();
+				for (int e = 0; e < m_queueSize; e++)
+				{
+					if (e != m_QueueRear && (m_pResultQueue + e)->size() != 0)
+						(m_pResultQueue + e)->clear();
+				}
+				m_QueueFront = m_QueueRear;
+				m_tempResult.pairStr = *(m_pResultQueue + m_QueueRear);
+				m_tempResult.odds.insert(m_tempResult.odds.end(), m_tempResult.pairStr.size() + 1, make_pair(1, dummyOdds));
+				result = inputStr;
+				return result;
+			}
+		}
+		result = GetResult(m_tempResult);
+	}
+	else
+	{
+		m_tempResult.pairStr = *(m_pResultQueue + m_QueueRear);
+		m_tempResult.odds.insert(m_tempResult.odds.end(), m_tempResult.pairStr.size() + 1, make_pair(1, dummyOdds));
+		result = inputStr;
+	}
+
+	return result;
 }
 
 int main()
 {
-	fstream  f("C:\\Users\\Link\\Desktop\\sample.txt");
-	vector<string> words;
+	fstream  f("C:\\Users\\Link\\Desktop\\SampleTEST.txt");
 	string answer;
 	string line;
-	vector<pair<int, string> > dummyOdds;
-	MergeFrameResult tempResult;
-	string result;
 	int successCount = 0;
 	int failCount = 0;
 	int averageCountSum = 0;
@@ -1122,107 +1225,46 @@ int main()
 	clock_t start, end;
 	double timeConsume = 0;
 	start = clock();
+
+	CombineTextResult L;
+	L.SetQueueSize(5);
+	bool recordAnswer = 0;
+	int c = 0;
+
+	getline(f, line);
+	answer = line;
 	while (getline(f, line))
 	{
-		if (words.empty() && answer.empty())
-			answer = line;
-		else if (line.empty() )
-		{
-			if (answer == result )
-			{
-				start = clock();
-				earlyStop = 0;
-				tempResult.odds.clear();
-				tempResult.pairStr.clear();
-				//printf("Success\n");
-				successCount++;
-				words.clear();
-				answer.clear();
-			}
-			else
-			{
-				start = clock();
-				earlyStop = 0;
-				tempResult.odds.clear();
-				tempResult.pairStr.clear();
-				//printf("fail\n");
-				failCount++;
-				words.clear();
-				answer.clear();
-			}
-		}
-		else
-		{
-			words.push_back(line);
-			MergeFrameResult inputFrame;
-			if (words.size() > 1)
-			{
-				if (words[words.size() - 1].size() > tempResult.pairStr.size())
-				{
-					tempResult.odds.clear();
-					tempResult.pairStr.clear();
-					tempResult.pairStr = words[words.size() - 1];
-					tempResult.odds.insert(tempResult.odds.end(), tempResult.pairStr.size() + 1, make_pair(1, dummyOdds));
-					vector<int> usedSet;
-					usedSet.push_back(words.size() - 1);
-					for (int i = words.size() - 1; i >= 0; i--)
-					{
-						auto hasfound = find(usedSet.begin(), usedSet.end(), i);
-						if (hasfound != usedSet.end())
-						{
-							continue;
-						}
-						else
-						{
-							inputFrame.odds.clear();
-							inputFrame.pairStr = words[i];
-							inputFrame.odds.insert(inputFrame.odds.end(), inputFrame.pairStr.size() + 1, make_pair(1, dummyOdds));
-							tempResult = GetUnionOfStrings(tempResult, inputFrame);
-						}
-					}
-				}
-				else
-				{
-					inputFrame.pairStr = words[words.size() - 1];
-					inputFrame.odds.insert(inputFrame.odds.end(), inputFrame.pairStr.size() + 1, make_pair(1, dummyOdds));
-					tempResult = GetUnionOfStrings(tempResult, inputFrame);
-				}
 
-				result = GetResult(tempResult);
-				//for (int i = 0; i < tempResult.odds.size(); i++)
-				//{
-				//	for (int j = 0; j < tempResult.odds[i].second.size(); j++)
-				//	{
-				//		if (tempResult.odds[i].second[j].first)
-				//			break;
-				//	}
-				//}
-				//cout << (result == answer) << endl;
-				if (result == answer && earlyStop == 0 && tempResult.odds[0].first>2)
-				{
-					end = clock();
-					timeConsume += end - start;
-					earlyStop = 1;
-					/*cout << words.size() << endl;*/
-					averageCountSum += words.size();
-				}
-				//cout << "\n" << "StringMix: ";
-				//for (int j = 0; j < result.size(); j++)
-				//{
-				//	cout << setw(3) << setiosflags(ios::left) << result[j];
-				//}
-				//cout << "\n" << "AnswerStr: ";
-				//for (int j = 0; j < answer.size(); j++)
-				//{
-				//	cout << setw(3) << setiosflags(ios::left) << answer[j];
-				//}
-				//cout << "\n";
+		if (line.empty())
+		{
+			recordAnswer = 1;
+			continue;
+		}
+		if (recordAnswer)
+		{
+			answer = line;
+			recordAnswer = 0;
+			continue;
+		}
+		c++;
+
+		string inputStr(line);
+		string result = L.CombineString(inputStr);
+		cout << result << endl;
+
+		if (c == 5)
+		{
+			if (result != answer)
+			{
+				failCount++;
 			}
 			else
-				continue;
+				successCount++;
+			c = 0;
 		}
 	}
-	
+
 	cout << timeConsume << endl;
 	cout << successCount << " " << failCount << endl;
 	cout << averageCountSum << endl;
