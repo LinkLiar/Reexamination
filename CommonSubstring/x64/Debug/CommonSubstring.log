@@ -1,27 +1,30 @@
 ﻿  FindCommonSubstring.cpp
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(595,9): warning C4244: 'initializing': conversion from '__int64' to 'int', possible loss of data
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(935,39): warning C4244: 'argument': conversion from '__int64' to '_Ty', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring - Copy (32)\CommonSubstring\FindCommonSubstring.cpp(614,9): warning C4244: 'initializing': conversion from '__int64' to 'int', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring - Copy (32)\CommonSubstring\FindCommonSubstring.cpp(954,39): warning C4244: 'argument': conversion from '__int64' to '_Ty', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(1040,39): warning C4244: 'argument': conversion from '__int64' to '_Ty', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring - Copy (32)\CommonSubstring\FindCommonSubstring.cpp(1059,39): warning C4244: 'argument': conversion from '__int64' to '_Ty', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(1141,44): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(1225,17): warning C4101: 'end': unreferenced local variable
+C:\Users\Link\source\repos\CommonSubstring - Copy (32)\CommonSubstring\FindCommonSubstring.cpp(1149,44): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include\utility(249,55): warning C4267: 'initializing': conversion from 'size_t' to '_Ty1', possible loss of data
           with
           [
               _Ty1=int
           ]
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(686): message : see reference to function template instantiation 'std::pair<int,int>::pair<unsigned __int64,unsigned __int64,0>(std::pair<unsigned __int64,unsigned __int64> &&) noexcept' being compiled
-C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\FindCommonSubstring.cpp(686): message : see reference to function template instantiation 'std::pair<int,int>::pair<unsigned __int64,unsigned __int64,0>(std::pair<unsigned __int64,unsigned __int64> &&) noexcept' being compiled
+C:\Users\Link\source\repos\CommonSubstring - Copy (32)\CommonSubstring\FindCommonSubstring.cpp(705): message : see reference to function template instantiation 'std::pair<int,int>::pair<unsigned __int64,unsigned __int64,0>(std::pair<unsigned __int64,unsigned __int64> &&) noexcept' being compiled
+C:\Users\Link\source\repos\CommonSubstring - Copy (32)\CommonSubstring\FindCommonSubstring.cpp(705): message : see reference to function template instantiation 'std::pair<int,int>::pair<unsigned __int64,unsigned __int64,0>(std::pair<unsigned __int64,unsigned __int64> &&) noexcept' being compiled
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include\utility(249,55): warning C4267: 'initializing': conversion from 'size_t' to '_Ty2', possible loss of data
           with
           [
               _Ty2=int
           ]
-  CommonSubstring.vcxproj -> C:\Users\Link\source\repos\CommonSubstring\x64\Debug\CommonSubstring.exe
+  GetCommonSubstring.cpp
+  SearchCommonSubstring.cpp
+  GrowCommonSubstring.cpp
+  Generating Code...
+  CommonSubstring.vcxproj -> C:\Users\Link\source\repos\CommonSubstring - Copy (32)\x64\Debug\CommonSubstring.exe

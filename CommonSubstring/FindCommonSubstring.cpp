@@ -16,7 +16,26 @@ typedef struct
 	vector<pair<int, vector<pair<int, string> > > >odds;
 }MergeFrameResult;
 
-vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string str2, pair<int, int> tlPoint, pair<int, int> brPoint, vector<pair<int, vector<pair<int, string> > > >mainOdds, vector<pair<int, vector<pair<int, string> > > >tempOdds)    // 求区域内匹配字数最多的子串集合
+class CombineTextResult
+{
+public:
+	int SetQueueSize(int size);
+	string CombineString(string input);
+	int FreeQueue();
+
+private:
+	int m_queueSize = 0;
+	string* m_pResultQueue = NULL;
+	int m_QueueFront = 0;
+	int m_QueueRear = -1;
+	MergeFrameResult m_tempResult;
+
+	string GetResult(MergeFrameResult& frame);
+	MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameResult mergedResult2);
+	vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string str2, pair<int, int> tlPoint, pair<int, int> brPoint, vector<pair<int, vector<pair<int, string> > > >mainOdds, vector<pair<int, vector<pair<int, string> > > >tempOdds);
+};
+
+vector<pair<int, int> > CombineTextResult::GetIntersectionOfMatrix(const string str1, const string str2, pair<int, int> tlPoint, pair<int, int> brPoint, vector<pair<int, vector<pair<int, string> > > >mainOdds, vector<pair<int, vector<pair<int, string> > > >tempOdds)    // 求区域内匹配字数最多的子串集合
 {
 	if (str1.empty() || str2.empty())
 		return {};
@@ -361,7 +380,7 @@ vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string 
 	return result;
 }
 
-MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameResult mergedResult2)
+MergeFrameResult CombineTextResult::GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameResult mergedResult2)
 {
 	MergeFrameResult fusionResult;
 	if (mergedResult1.pairStr.empty() || mergedResult2.pairStr.empty())
@@ -816,7 +835,7 @@ MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameRes
 	return fusionResult;
 }
 
-string GetResult(MergeFrameResult& frame)
+string CombineTextResult::GetResult(MergeFrameResult& frame)
 {
 	string& pairStr = frame.pairStr;
 	vector<pair<int, vector<pair<int, string> > > >& odds = frame.odds;
@@ -1066,37 +1085,26 @@ string GetResult(MergeFrameResult& frame)
 	return result;
 }
 
-class CombineTextResult
-{
-public:
-	void SetQueueSize(int size);
-	string CombineString(string input);
-	void FreeQueue();
-
-private:
-	int m_queueSize = 0;
-	string* m_pResultQueue = NULL;
-	int m_QueueFront = 0;
-	int m_QueueRear = -1;
-	MergeFrameResult m_tempResult;
-};
-
-void CombineTextResult::SetQueueSize(int size)
+int CombineTextResult::SetQueueSize(int size)
 {
 	m_queueSize = size;
 	if (m_pResultQueue == NULL)
 	{
 		m_pResultQueue = new string[size];
+		return size;
 	}
+	return -1;
 }
 
-void CombineTextResult::FreeQueue()
+int CombineTextResult::FreeQueue()
 {
 	m_queueSize = 0;
 	if (m_pResultQueue == NULL)
 	{
 		delete m_pResultQueue;
+		return m_queueSize;
 	}
+	return -1;
 }
 
 string CombineTextResult::CombineString(const string inputStr)
@@ -1230,9 +1238,10 @@ int main()
 	L.SetQueueSize(5);
 	bool recordAnswer = 0;
 	int c = 0;
-
+	start = clock();
 	getline(f, line);
 	answer = line;
+
 	while (getline(f, line))
 	{
 
@@ -1247,11 +1256,12 @@ int main()
 			recordAnswer = 0;
 			continue;
 		}
+
 		c++;
 
 		string inputStr(line);
 		string result = L.CombineString(inputStr);
-		cout << result << endl;
+		//cout << result << endl;
 
 		if (c == 5)
 		{
@@ -1264,8 +1274,9 @@ int main()
 			c = 0;
 		}
 	}
-
+	end = clock();
 	cout << timeConsume << endl;
+	cout << end - start << endl;
 	cout << successCount << " " << failCount << endl;
 	cout << averageCountSum << endl;
 	return 0;
