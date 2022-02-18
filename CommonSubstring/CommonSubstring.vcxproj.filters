@@ -15,17 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SearchCommonSubstring.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GrowCommonSubstring.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="CombineResults.cpp">
+      <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="FindCommonSubstring.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GetCommonSubstring.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CombineResults.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

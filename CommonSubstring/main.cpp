@@ -1,0 +1,61 @@
+﻿#include "CombineResults.h"
+#include <fstream>
+#include <time.h>
+
+int main()
+{
+	fstream  f("C:\\Users\\Link\\Desktop\\Sample.txt");
+
+	string answer;
+	string line;
+	int successCount = 0;
+	int failCount = 0;
+	clock_t start, end;
+
+	CombineTextResult L;
+	L.SetQueueSize(5);
+	bool recordAnswer = 0;
+	int c = 0;
+	getline(f, line);
+	answer = line;
+
+	start = clock();
+	while (getline(f, line))
+	{
+		if (line.empty())
+		{
+			recordAnswer = 1;
+			continue;
+		}
+		if (recordAnswer)
+		{
+			answer = line;
+			recordAnswer = 0;
+			continue;
+		}
+
+		c++;
+
+		string result = L.CombineString(line);
+		// cout << result << endl;
+
+		if (c == 5)
+		{
+			if (result != answer)
+			{
+				failCount++;
+				//cout <<":" << result << endl;
+				//cout << answer << endl;
+			}
+			else
+				successCount++;
+			c = 0;
+		}
+	}
+	L.FreeQueue();
+	end = clock();
+	cout << end - start << endl;
+	cout << successCount << " : " << failCount << endl;
+
+	return 0;
+}
