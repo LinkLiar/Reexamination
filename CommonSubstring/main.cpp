@@ -4,7 +4,7 @@
 
 int main()
 {
-	fstream  f("C:\\Users\\Link\\Desktop\\Sample.txt");
+	fstream  f("C:\\Users\\Link\\Desktop\\SampleTEST.txt");
 
 	string answer;
 	string line;
@@ -12,8 +12,7 @@ int main()
 	int failCount = 0;
 	clock_t start, end;
 
-	CombineTextResult L;
-	L.SetQueueSize(5);
+	SetQueueSize(5);
 	bool recordAnswer = 0;
 	int c = 0;
 	getline(f, line);
@@ -36,12 +35,12 @@ int main()
 
 		c++;
 
-		string result = L.CombineString(line);
+		const char* result = CombineString(line.c_str());
 		// cout << result << endl;
 
 		if (c == 5)
 		{
-			if (result != answer)
+			if (strcmp(result, answer.c_str())!=0)
 			{
 				failCount++;
 				//cout <<":" << result << endl;
@@ -52,7 +51,7 @@ int main()
 			c = 0;
 		}
 	}
-	L.FreeQueue();
+	FreeQueue();
 	end = clock();
 	cout << end - start << endl;
 	cout << successCount << " : " << failCount << endl;

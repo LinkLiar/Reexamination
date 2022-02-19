@@ -1,6 +1,13 @@
 ﻿#include "CombineResults.h"
 
-vector<pair<int, int> > CombineTextResult::GetIntersectionOfMatrix(const string str1, const string str2, pair<int, int> tlPoint, pair<int, int> brPoint, vector<pair<int, vector<pair<int, string> > > >mainOdds, vector<pair<int, vector<pair<int, string> > > >tempOdds)    // 求区域内匹配字数最多的子串集合
+static int queueSize = 0;
+static string* pResultQueue = NULL;
+static int queueFront = 0;
+static int queueRear = -1;
+static MergeFrameResult tempResult;
+static string combineResult;
+
+vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string str2, pair<int, int> tlPoint, pair<int, int> brPoint, vector<pair<int, vector<pair<int, string> > > >mainOdds, vector<pair<int, vector<pair<int, string> > > >tempOdds)    // 求区域内匹配字数最多的子串集合
 {
 	if (str1.empty() || str2.empty())
 		return {};
@@ -339,7 +346,7 @@ vector<pair<int, int> > CombineTextResult::GetIntersectionOfMatrix(const string 
 	return result;
 }
 
-MergeFrameResult CombineTextResult::GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameResult mergedResult2)
+MergeFrameResult GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameResult mergedResult2)
 {
 	MergeFrameResult fusionResult;
 	if (mergedResult1.pairStr.empty() || mergedResult2.pairStr.empty())
@@ -768,7 +775,7 @@ MergeFrameResult CombineTextResult::GetUnionOfStrings(MergeFrameResult mergedRes
 	return fusionResult;
 }
 
-string CombineTextResult::GetResult(MergeFrameResult& frame)
+string GetResult(MergeFrameResult& frame)
 {
 	string& pairStr = frame.pairStr;
 	vector<pair<int, vector<pair<int, string> > > >& odds = frame.odds;
@@ -1016,49 +1023,49 @@ string CombineTextResult::GetResult(MergeFrameResult& frame)
 	return result;
 }
 
-int CombineTextResult::SetQueueSize(int size)
+int SetQueueSize(int size)
 {
-	m_queueSize = size;
-	if (m_pResultQueue == NULL)
+	queueSize = size;
+	if (pResultQueue == NULL)
 	{
-		m_pResultQueue = new string[size];
+		pResultQueue = new string[size];
 		return size;
 	}
 	return -1;
 }
 
-int CombineTextResult::FreeQueue()
+int FreeQueue()
 {
-	m_queueSize = 0;
-	if (m_pResultQueue == NULL)
+	queueSize = 0;
+	if (pResultQueue == NULL)
 	{
-		delete m_pResultQueue;
-		return m_queueSize;
+		delete pResultQueue;
+		return queueSize;
 	}
 	return -1;
 }
 
-string CombineTextResult::CombineString(const string inputStr)
+const char* CombineString(const char* input)
 {
+	string inputStr = string(input);
 	vector<pair<int, string> > dummyOdds;
 	MergeFrameResult inputFrame;
-	string result;
 
-	if (m_pResultQueue == NULL || m_queueSize == 0 || inputStr.empty())
-		return {};
+	if (pResultQueue == NULL || queueSize == 0 || inputStr.empty())
+		return NULL;
 
-	if ((m_QueueRear + 1 + m_queueSize) % m_queueSize == m_QueueFront && m_QueueRear != -1)
+	if ((queueRear + 1 + queueSize) % queueSize == queueFront && queueRear != -1)
 	{
-		m_QueueFront = (m_QueueFront + 1 + m_queueSize) % m_queueSize;
+		queueFront = (queueFront + 1 + queueSize) % queueSize;
 	}
 
-	m_QueueRear = (m_QueueRear + 1 + m_queueSize) % m_queueSize;
-	*(m_pResultQueue + m_QueueRear) = inputStr;
+	queueRear = (queueRear + 1 + queueSize) % queueSize;
+	*(pResultQueue + queueRear) = inputStr;
 
 	int existSize = 1;
-	for (int i = (m_QueueRear - 1 + m_queueSize) % m_queueSize; i != m_QueueRear; i = (i - 1 + m_queueSize) % m_queueSize)    // 计算队列中有多少帧
+	for (int i = (queueRear - 1 + queueSize) % queueSize; i != queueRear; i = (i - 1 + queueSize) % queueSize)    // 计算队列中有多少帧
 	{
-		if ((m_pResultQueue + i)->size() == 0)
+		if ((pResultQueue + i)->size() == 0)
 			break;
 		else
 			existSize++;
@@ -1066,70 +1073,70 @@ string CombineTextResult::CombineString(const string inputStr)
 
 	if (existSize > 1)
 	{
-		if ((m_pResultQueue + m_QueueRear)->size() > m_tempResult.pairStr.size() || (existSize == m_queueSize && m_tempResult.odds[0].first != m_queueSize - 1))
+		if ((pResultQueue + queueRear)->size() > tempResult.pairStr.size() || (existSize == queueSize && tempResult.odds[0].first != queueSize - 1))
 		{
-			m_tempResult.odds.clear();
-			m_tempResult.pairStr.clear();
+			tempResult.odds.clear();
+			tempResult.pairStr.clear();
 			int longestId = -1;
 			int longest = 0;
 
-			for (int i = m_QueueRear; ; i = (i - 1 + m_queueSize) % m_queueSize)
+			for (int i = queueRear; ; i = (i - 1 + queueSize) % queueSize)
 			{
-				if ((m_pResultQueue + i)->size() > longest)
+				if ((pResultQueue + i)->size() > longest)
 				{
 					longestId = i;
-					longest = (m_pResultQueue + i)->size();
+					longest = (pResultQueue + i)->size();
 				}
-				if (i == m_QueueFront)
+				if (i == queueFront)
 					break;
 			}
 
-			m_tempResult.pairStr = *(m_pResultQueue + longestId);
-			m_tempResult.odds.insert(m_tempResult.odds.end(), m_tempResult.pairStr.size() + 1, make_pair(1, dummyOdds));
+			tempResult.pairStr = *(pResultQueue + longestId);
+			tempResult.odds.insert(tempResult.odds.end(), tempResult.pairStr.size() + 1, make_pair(1, dummyOdds));
 
-			for (int i = m_QueueRear; ; i = (i - 1 + m_queueSize) % m_queueSize)
+			for (int i = queueRear; ; i = (i - 1 + queueSize) % queueSize)
 			{
 				if (i == longestId)
 				{
-					if (i == m_QueueFront)
+					if (i == queueFront)
 						break;
 					continue;
 				}
 				inputFrame.odds.clear();
-				inputFrame.pairStr = *(m_pResultQueue + i);
+				inputFrame.pairStr = *(pResultQueue + i);
 				inputFrame.odds.insert(inputFrame.odds.end(), inputFrame.pairStr.size() + 1, make_pair(1, dummyOdds));
-				m_tempResult = GetUnionOfStrings(m_tempResult, inputFrame);
+				tempResult = GetUnionOfStrings(tempResult, inputFrame);
 
-				if (m_tempResult.pairStr.size() == 0)
+				if (tempResult.pairStr.size() == 0)
 				{
-					m_tempResult.odds.clear();
-					m_tempResult.pairStr.clear();
-					for (int e = 0; e < m_queueSize; e++)
+					tempResult.odds.clear();
+					tempResult.pairStr.clear();
+					for (int e = 0; e < queueSize; e++)
 					{
-						if (e != m_QueueRear && (m_pResultQueue + e)->size() != 0)
-							(m_pResultQueue + e)->clear();
+						if (e != queueRear && (pResultQueue + e)->size() != 0)
+							(pResultQueue + e)->clear();
 					}
-					m_QueueFront = m_QueueRear;
-					m_tempResult.pairStr = *(m_pResultQueue + m_QueueRear);
-					m_tempResult.odds.insert(m_tempResult.odds.end(), m_tempResult.pairStr.size() + 1, make_pair(1, dummyOdds));
-					result = inputStr;
-					return result;
+					queueFront = queueRear;
+					tempResult.pairStr = *(pResultQueue + queueRear);
+					tempResult.odds.insert(tempResult.odds.end(), tempResult.pairStr.size() + 1, make_pair(1, dummyOdds));
+					combineResult = inputStr;
+					return combineResult.c_str();
 				}
 
 				bool earlyStop = 0;
-				if (m_tempResult.odds[0].first > (existSize / 2))    // 判断是否满足提前退出条件 
+				if (tempResult.odds[0].first > (existSize / 2))    // 判断是否满足提前退出条件 
 				{
 					earlyStop = 1;
-					for (int j = 0; j < m_tempResult.odds.size(); j++)
+					for (int j = 0; j < tempResult.odds.size(); j++)
 					{
-						if (m_tempResult.odds[j].first <= (existSize / 2))
+						if (tempResult.odds[j].first <= (existSize / 2))
 						{
 							earlyStop = 0;
 							break;
 						}
-						for (int k = 0; k < m_tempResult.odds[j].second.size(); k++)
+						for (int k = 0; k < tempResult.odds[j].second.size(); k++)
 						{
-							if (m_tempResult.odds[j].second[k].first + existSize - m_tempResult.odds[0].first > (existSize / 2))
+							if (tempResult.odds[j].second[k].first + existSize - tempResult.odds[0].first > (existSize / 2))
 							{
 								earlyStop = 0;
 								break;
@@ -1139,40 +1146,40 @@ string CombineTextResult::CombineString(const string inputStr)
 							break;
 					}
 				}
-				if (i == m_QueueFront || earlyStop)
+				if (i == queueFront || earlyStop)
 					break;
 			}
 		}
 		else
 		{
-			inputFrame.pairStr = *(m_pResultQueue + m_QueueRear);
+			inputFrame.pairStr = *(pResultQueue + queueRear);
 			inputFrame.odds.insert(inputFrame.odds.end(), inputFrame.pairStr.size() + 1, make_pair(1, dummyOdds));
-			m_tempResult = GetUnionOfStrings(m_tempResult, inputFrame);
+			tempResult = GetUnionOfStrings(tempResult, inputFrame);
 
-			if (m_tempResult.pairStr.size() == 0)
+			if (tempResult.pairStr.size() == 0)
 			{
-				m_tempResult.odds.clear();
-				m_tempResult.pairStr.clear();
-				for (int e = 0; e < m_queueSize; e++)
+				tempResult.odds.clear();
+				tempResult.pairStr.clear();
+				for (int e = 0; e < queueSize; e++)
 				{
-					if (e != m_QueueRear && (m_pResultQueue + e)->size() != 0)
-						(m_pResultQueue + e)->clear();
+					if (e != queueRear && (pResultQueue + e)->size() != 0)
+						(pResultQueue + e)->clear();
 				}
-				m_QueueFront = m_QueueRear;
-				m_tempResult.pairStr = *(m_pResultQueue + m_QueueRear);
-				m_tempResult.odds.insert(m_tempResult.odds.end(), m_tempResult.pairStr.size() + 1, make_pair(1, dummyOdds));
-				result = inputStr;
-				return result;
+				queueFront = queueRear;
+				tempResult.pairStr = *(pResultQueue + queueRear);
+				tempResult.odds.insert(tempResult.odds.end(), tempResult.pairStr.size() + 1, make_pair(1, dummyOdds));
+				combineResult = inputStr;
+				return combineResult.c_str();
 			}
 		}
 
-		result = GetResult(m_tempResult);
+		combineResult = GetResult(tempResult);
 	}
 	else
 	{
-		m_tempResult.pairStr = *(m_pResultQueue + m_QueueRear);
-		m_tempResult.odds.insert(m_tempResult.odds.end(), m_tempResult.pairStr.size() + 1, make_pair(1, dummyOdds));
-		result = inputStr;
+		tempResult.pairStr = *(pResultQueue + queueRear);
+		tempResult.odds.insert(tempResult.odds.end(), tempResult.pairStr.size() + 1, make_pair(1, dummyOdds));
+		combineResult = inputStr;
 	}
-	return result;
+	return combineResult.c_str();
 }
