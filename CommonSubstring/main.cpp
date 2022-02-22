@@ -4,7 +4,7 @@
 
 int main()
 {
-	fstream  f("C:\\Users\\Link\\Desktop\\SampleTEST.txt");
+	fstream  f("C:\\Users\\Link\\Desktop\\Sample.txt");
 
 	string answer;
 	string line;
@@ -12,13 +12,15 @@ int main()
 	int failCount = 0;
 	clock_t start, end;
 
-	SetQueueSize(5);
+	CombineTextResults L(5);
+	CombineTextResults* ptr = &L;
+
 	bool recordAnswer = 0;
 	int c = 0;
 	getline(f, line);
 	answer = line;
-
 	start = clock();
+
 	while (getline(f, line))
 	{
 		if (line.empty())
@@ -35,12 +37,13 @@ int main()
 
 		c++;
 
-		const char* result = CombineString(line.c_str());
-		// cout << result << endl;
-
+		int* pScore = new int;
+		const char* re = CombineResults(reinterpret_cast<void*>(ptr), line.c_str(), pScore);
+		string result(re);
+		delete pScore;
 		if (c == 5)
 		{
-			if (strcmp(result, answer.c_str())!=0)
+			if (result != answer)
 			{
 				failCount++;
 				//cout <<":" << result << endl;
@@ -51,7 +54,7 @@ int main()
 			c = 0;
 		}
 	}
-	FreeQueue();
+
 	end = clock();
 	cout << end - start << endl;
 	cout << successCount << " : " << failCount << endl;
