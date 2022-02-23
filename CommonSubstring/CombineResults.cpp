@@ -1022,16 +1022,16 @@ void CombineTextResults::CombineString(const string inputStr, int* pScore)
 	MergeFrameResult inputFrame;
 	int score = 0;
 
-	if ((m_QueueRear + 1 + m_queueSize) % m_queueSize == m_QueueFront && m_QueueRear != -1)
+	if ((m_queueRear + 1 + m_queueSize) % m_queueSize == m_queueFront && m_queueRear != -1)
 	{
-		m_QueueFront = (m_QueueFront + 1 + m_queueSize) % m_queueSize;
+		m_queueFront = (m_queueFront + 1 + m_queueSize) % m_queueSize;
 	}
 
-	m_QueueRear = (m_QueueRear + 1 + m_queueSize) % m_queueSize;
-	m_resultQueue[m_QueueRear] = inputStr;
+	m_queueRear = (m_queueRear + 1 + m_queueSize) % m_queueSize;
+	m_resultQueue[m_queueRear] = inputStr;
 
 	int existSize = 1;
-	for (int i = (m_QueueRear - 1 + m_queueSize) % m_queueSize; i != m_QueueRear; i = (i - 1 + m_queueSize) % m_queueSize)    // 计算队列中有多少帧
+	for (int i = (m_queueRear - 1 + m_queueSize) % m_queueSize; i != m_queueRear; i = (i - 1 + m_queueSize) % m_queueSize)    // 计算队列中有多少帧
 	{
 		if (m_resultQueue[i].size() == 0)
 			break;
@@ -1041,7 +1041,7 @@ void CombineTextResults::CombineString(const string inputStr, int* pScore)
 
 	if (existSize > 1)
 	{
-		if (m_resultQueue[m_QueueRear].size() > m_tempResult.pairStr.size() || (existSize == m_queueSize && m_tempResult.odds[0].first != m_queueSize - 1))
+		if (m_resultQueue[m_queueRear].size() > m_tempResult.pairStr.size() || (existSize == m_queueSize && m_tempResult.odds[0].first != m_queueSize - 1))
 		{
 			m_hadCheckFrame = 1;
 			m_tempResult.odds.clear();
@@ -1049,25 +1049,25 @@ void CombineTextResults::CombineString(const string inputStr, int* pScore)
 			int longestId = -1;
 			int longest = 0;
 
-			for (int i = m_QueueRear; ; i = (i - 1 + m_queueSize) % m_queueSize)
+			for (int i = m_queueRear; ; i = (i - 1 + m_queueSize) % m_queueSize)
 			{
 				if (m_resultQueue[i].size() > longest)
 				{
 					longestId = i;
 					longest = m_resultQueue[i].size();
 				}
-				if (i == m_QueueFront)
+				if (i == m_queueFront)
 					break;
 			}
 
 			m_tempResult.pairStr = m_resultQueue[longestId];
 			m_tempResult.odds.insert(m_tempResult.odds.end(), m_tempResult.pairStr.size() + 1, make_pair(1, dummyOdds));
 
-			for (int i = m_QueueRear; ; i = (i - 1 + m_queueSize) % m_queueSize)
+			for (int i = m_queueRear; ; i = (i - 1 + m_queueSize) % m_queueSize)
 			{
 				if (i == longestId)
 				{
-					if (i == m_QueueFront)
+					if (i == m_queueFront)
 						break;
 					continue;
 				}
@@ -1084,11 +1084,11 @@ void CombineTextResults::CombineString(const string inputStr, int* pScore)
 					m_tempResult.pairStr.clear();
 					for (int e = 0; e < m_queueSize; e++)
 					{
-						if (e != m_QueueRear && m_resultQueue[e].size() != 0)
+						if (e != m_queueRear && m_resultQueue[e].size() != 0)
 							m_resultQueue[e].clear();
 					}
-					m_QueueFront = m_QueueRear;
-					m_tempResult.pairStr = m_resultQueue[m_QueueRear];
+					m_queueFront = m_queueRear;
+					m_tempResult.pairStr = m_resultQueue[m_queueRear];
 					m_tempResult.odds.insert(m_tempResult.odds.end(), m_tempResult.pairStr.size() + 1, make_pair(1, dummyOdds));
 					m_combineResult = inputStr;
 					score = 50;
@@ -1118,12 +1118,12 @@ void CombineTextResults::CombineString(const string inputStr, int* pScore)
 							break;
 						}
 					}
-					if (earlyStop == 1 && i != m_QueueFront)
+					if (earlyStop == 1 && i != m_queueFront)
 					{
 						score = 100;
 					}
 				}
-				if (i == m_QueueFront || earlyStop)
+				if (i == m_queueFront || earlyStop)
 				{
 					break;
 				}
@@ -1132,7 +1132,7 @@ void CombineTextResults::CombineString(const string inputStr, int* pScore)
 		else
 		{
 			m_hadCheckFrame++;
-			inputFrame.pairStr = m_resultQueue[m_QueueRear];
+			inputFrame.pairStr = m_resultQueue[m_queueRear];
 			inputFrame.odds.insert(inputFrame.odds.end(), inputFrame.pairStr.size() + 1, make_pair(1, dummyOdds));
 			m_tempResult = GetUnionOfStrings(m_tempResult, inputFrame);
 
@@ -1143,11 +1143,11 @@ void CombineTextResults::CombineString(const string inputStr, int* pScore)
 				m_tempResult.pairStr.clear();
 				for (int e = 0; e < m_queueSize; e++)
 				{
-					if (e != m_QueueRear && m_resultQueue[e].size() != 0)
+					if (e != m_queueRear && m_resultQueue[e].size() != 0)
 						m_resultQueue[e].clear();
 				}
-				m_QueueFront = m_QueueRear;
-				m_tempResult.pairStr = m_resultQueue[m_QueueRear];
+				m_queueFront = m_queueRear;
+				m_tempResult.pairStr = m_resultQueue[m_queueRear];
 				m_tempResult.odds.insert(m_tempResult.odds.end(), m_tempResult.pairStr.size() + 1, make_pair(1, dummyOdds));
 				m_combineResult = inputStr;
 				score = 50;
@@ -1158,7 +1158,7 @@ void CombineTextResults::CombineString(const string inputStr, int* pScore)
 	else
 	{
 		m_hadCheckFrame = 1;
-		m_tempResult.pairStr = m_resultQueue[m_QueueRear];
+		m_tempResult.pairStr = m_resultQueue[m_queueRear];
 		m_tempResult.odds.insert(m_tempResult.odds.end(), m_tempResult.pairStr.size() + 1, make_pair(1, dummyOdds));
 		m_combineResult = inputStr;
 		score = 50;
@@ -1222,9 +1222,16 @@ CombineTextResults::~CombineTextResults(void)
 
 }
 
-const char* CombineResults(void* CombineTextResultsInstance, const char* input, int* score)
+const char* CombineResults(void* CombineTextResultsInstance, const char* pInput, int* pScore)
 {
-	CombineTextResults* instance = reinterpret_cast<CombineTextResults*>(CombineTextResultsInstance);
-	instance->CombineString(input, score);
-	return instance->m_combineResult.c_str();
+	if (CombineTextResultsInstance != NULL)
+	{
+		CombineTextResults* pInstance = reinterpret_cast<CombineTextResults*>(CombineTextResultsInstance);
+		if (pInstance != NULL)
+		{
+			pInstance->CombineString(pInput, pScore);
+			return pInstance->m_combineResult.c_str();
+		}
+	}
+	return NULL;
 }

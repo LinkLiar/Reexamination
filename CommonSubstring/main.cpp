@@ -4,7 +4,7 @@
 
 int main()
 {
-	fstream  f("C:\\Users\\Link\\Desktop\\Sample.txt");
+	fstream  f("C:\\Users\\Link\\Desktop\\sample.txt");
 
 	string answer;
 	string line;
@@ -40,7 +40,7 @@ int main()
 		int* pScore = new int;
 		const char* re = CombineResults(reinterpret_cast<void*>(ptr), line.c_str(), pScore);
 		string result(re);
-		delete pScore;
+
 		if (c == 5)
 		{
 			if (result != answer)
@@ -53,6 +53,7 @@ int main()
 				successCount++;
 			c = 0;
 		}
+		delete pScore;
 	}
 
 	end = clock();

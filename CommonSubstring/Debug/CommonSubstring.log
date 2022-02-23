@@ -1,0 +1,55 @@
+﻿  CombineResults.cpp
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(177,22): warning C4018: '>': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(557,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(640,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(653,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(661,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(663,54): warning C4018: '<=': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(663,112): warning C4018: '<=': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(663,172): warning C4018: '<=': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(708,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(777,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(783,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(813,28): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(856,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(864,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(872,15): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(874,24): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(887,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(891,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(895,16): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(897,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(915,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(927,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(935,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(943,15): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(945,24): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(960,24): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(992,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(996,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(1000,16): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(1002,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(1054,33): warning C4018: '>': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(1101,24): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(1108,25): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(1170,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(1176,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(1178,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(1184,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(1186,22): warning C4244: '*=': conversion from '_Ty' to 'int', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(1191,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(1197,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(1199,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(1205,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Link\source\repos\CommonSubstring\CommonSubstring\CombineResults.cpp(1207,22): warning C4244: '*=': conversion from '_Ty' to 'int', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+  main.cpp
+  Generating Code...
+  CommonSubstring.vcxproj -> C:\Users\Link\source\repos\CommonSubstring\Debug\CommonSubstring.exe
