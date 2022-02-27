@@ -18,7 +18,7 @@ class CombineTextResults
 public:
 	CombineTextResults(int size);
 	~CombineTextResults();
-	void CombineString(const string inputStr, int* pScore);
+	void CombineString(const string inputStr, int& iScore);
 	string m_combineResult;
 
 private:
@@ -34,4 +34,7 @@ private:
 	vector<pair<int, int> > GetIntersectionOfMatrix(const string str1, const string str2, pair<int, int> tlPoint, pair<int, int> brPoint, vector<pair<int, vector<pair<int, string> > > >mainOdds, vector<pair<int, vector<pair<int, string> > > >tempOdds);
 };
 
-const char* CombineResults(void* CombineTextResultsInstance, const char* pInput, int* pScore);
+void CreateCombineResultsInstance(void** pCombineTextResultsInstance, int size);
+void CombineResults(void* pCombineTextResultsInstance, const char* pInput, char** pOutput, int& iScore);
+void FreeCombinedResults(char** pOutput);
+void DestroyCombineResultsInstance(void** pCombineTextResultsInstance);

@@ -1016,7 +1016,7 @@ string CombineTextResults::GetResult(MergeFrameResult& frame)
 	return result;
 }
 
-void CombineTextResults::CombineString(const string inputStr, int* pScore)
+void CombineTextResults::CombineString(const string inputStr, int& iScore)
 {
 	vector<pair<int, string> > dummyOdds;
 	MergeFrameResult inputFrame;
@@ -1207,14 +1207,13 @@ void CombineTextResults::CombineString(const string inputStr, int* pScore)
 			score *= scores[i];
 		}
 	}
-	*pScore = score;
+	iScore = score;
 }
 
 CombineTextResults::CombineTextResults(int size)
 {
 	m_queueSize = size;
-	vector<string> temp(size, "");
-	m_resultQueue = temp;
+	m_resultQueue = vector<string>(size, "");
 }
 
 CombineTextResults::~CombineTextResults(void)
@@ -1222,16 +1221,48 @@ CombineTextResults::~CombineTextResults(void)
 
 }
 
-const char* CombineResults(void* CombineTextResultsInstance, const char* pInput, int* pScore)
+void CreateCombineResultsInstance(void** pCombineTextResultsInstance, int size)
 {
-	if (CombineTextResultsInstance != NULL)
+	void*& pInstance = (*pCombineTextResultsInstance);
+	if (pInstance == NULL)
 	{
-		CombineTextResults* pInstance = reinterpret_cast<CombineTextResults*>(CombineTextResultsInstance);
+		pInstance = reinterpret_cast<void*>(new CombineTextResults(size));
+	}
+}
+
+void CombineResults(void* pCombineTextResultsInstance, const char* pInput, char** pOutput, int& iScore)
+{
+	if (pCombineTextResultsInstance != NULL)
+	{
+		CombineTextResults* pInstance = reinterpret_cast<CombineTextResults*>(pCombineTextResultsInstance);
 		if (pInstance != NULL)
 		{
-			pInstance->CombineString(pInput, pScore);
-			return pInstance->m_combineResult.c_str();
+			pInstance->CombineString(pInput, iScore);
+			char*& pCombinedResult = (*pOutput);
+			pCombinedResult = new char[pInstance->m_combineResult.size() + 1];
+			strcpy(pCombinedResult, pInstance->m_combineResult.c_str());
 		}
 	}
-	return NULL;
+}
+
+void FreeCombinedResults(char** pOutput)
+{
+	if (*pOutput != NULL)
+	{
+		delete (*pOutput);
+		(*pOutput) = NULL;
+	}
+}
+
+void DestroyCombineResultsInstance(void** pCombineTextResultsInstance)
+{
+	if (pCombineTextResultsInstance != NULL)
+	{
+		CombineTextResults* pInstance = reinterpret_cast<CombineTextResults*>(*pCombineTextResultsInstance);
+		if (pInstance != NULL)
+		{
+			delete pInstance;
+			*pCombineTextResultsInstance = NULL;
+		}
+	}
 }

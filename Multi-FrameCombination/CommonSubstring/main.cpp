@@ -5,15 +5,14 @@
 int main()
 {
 	fstream  f("C:\\Users\\Link\\Desktop\\sample.txt");
-
 	string answer;
 	string line;
 	int successCount = 0;
 	int failCount = 0;
 	clock_t start, end;
 
-	CombineTextResults L(5);
-	CombineTextResults* ptr = &L;
+	void* pCombineTextResultsInstance = NULL;
+	CreateCombineResultsInstance(&pCombineTextResultsInstance, 5);
 
 	bool recordAnswer = 0;
 	int c = 0;
@@ -34,16 +33,15 @@ int main()
 			recordAnswer = 0;
 			continue;
 		}
-
 		c++;
 
-		int* pScore = new int;
-		const char* re = CombineResults(reinterpret_cast<void*>(ptr), line.c_str(), pScore);
-		string result(re);
+		int score;
+		char* re = NULL;
+		CombineResults(pCombineTextResultsInstance, line.c_str(), &re, score);
 
 		if (c == 5)
 		{
-			if (result != answer)
+			if (strcmp(re, answer.c_str()))
 			{
 				failCount++;
 				//cout <<":" << result << endl;
@@ -53,12 +51,11 @@ int main()
 				successCount++;
 			c = 0;
 		}
-		delete pScore;
+		FreeCombinedResults(&re);
 	}
-
 	end = clock();
 	cout << end - start << endl;
 	cout << successCount << " : " << failCount << endl;
-
+	DestroyCombineResultsInstance(&pCombineTextResultsInstance);
 	return 0;
 }
