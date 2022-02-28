@@ -9,5 +9,3 @@ Preparing For Reexamination
 - [ ] DeepLab V3 and its variation
 - [ ] C++11 std::chrono
 - [ ] Graduation Thesis(3D Zebrafish dataset)
-- [ ] 
-- [ ] 
