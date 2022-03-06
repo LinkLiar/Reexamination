@@ -123,3 +123,12 @@ Given an array of integers nums and an integer target, return indices of the two
 Given two non-negative integers low and high. Return the count of odd numbers between low and high (inclusive).
 
 计算方法：(low + high)/2 如果两端任一一个为奇数，则需+1
+
+1491. Average Salary Excluding the Minimum and Maximum Salary(去掉一个最高分和一个最低分算平均)
+You are given an array of unique integers salary where salary[i] is the salary of the ith employee.
+Return the average salary of employees excluding the minimum and maximum salary. Answers within 10-5 of the actual answer will be accepted.
+
+技巧：
+accumulate(begin(s), end(s), 0.)
+conversion to double (0. - with a dot - as the initial value for accumulate).
+min_element 和 max_element 头文件:#include<algorithm> 作用:返回容器中最小值和最大值的指针。max_element(first,end,cmp);其中cmp为可选择参数
