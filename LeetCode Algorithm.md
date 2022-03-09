@@ -97,6 +97,23 @@ Return the maximum area of an island in grid. If there is no island, return 0.
 
 DFS：当遍历到一个前景色块时，进行连通域的的DFS，递归：将该点的值置为背景色，递归其4/8连通域，返回1 + AreaOfIsland(grid, i+1, j) + AreaOfIsland(grid, i-1, j) + AreaOfIsland(grid, i, j-1) + AreaOfIsland(grid, i, j+1);
 
+617. Merge Two Binary Trees(将两棵树合并，重叠位置的数值求和)
+You are given two binary trees root1 and root2.
+Imagine that when you put one of them to cover the other, some nodes of the two trees are overlapped while the others are not. You need to merge the two trees into a new binary tree. The merge rule is that if two nodes overlap, then sum node values up as the new value of the merged node. Otherwise, the NOT null node will be used as the node of the new tree.
+Return the merged tree.
+
+深度优先遍历：用递归：若两结点位置重叠，则两节点的值相加，若位置不重叠，则返回存在的结点值。值相加；递归左子树位置，递归右子树位置.
+
+116. Populating Next Right Pointers in Each Node(将每个结点的next指针指向它右边的兄弟结点)
+You are given a perfect binary tree where all leaves are on the same level, and every parent has two children. The binary tree has the following
+Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.
+
+广度优先遍历：用循环+队列，先把右孩子压入队列，再把左孩子压入队列，每次弹出一个结点，修改它的next后，将它作为下一个等着被指向的结点。
+
+542. 01 Matrix(知道矩阵到0元素的距离)
+Given an m x n binary matrix mat, return the distance of the nearest 0 for each cell.
+
+方法1：用广度优先算法，将0元素的坐标收集起来，将0元素上下左右位置中未标记的位置用该元素的值+1作为替代，并压出队列中。
 --------------------------------------------------------------------------------------------------------------------------------------------
 ## Algorithm
 217.Contains Duplicate
