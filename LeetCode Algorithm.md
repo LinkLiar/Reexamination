@@ -116,7 +116,7 @@ Given an m x n binary matrix mat, return the distance of the nearest 0 for each 
 方法1：用广度优先算法，将0元素的坐标收集起来，将0元素上下左右位置中未标记的位置用该元素的值+1作为替代，并压出队列中。
 --------------------------------------------------------------------------------------------------------------------------------------------
 ## Algorithm
-217.Contains Duplicate
+217.Contains Duplicate(找重复的数)
 Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.
 
 1.对数组排序后，判断数组第i与第i+1个元素是否相等； 
@@ -126,14 +126,35 @@ Given an integer array nums, return true if any value appears at least twice in 
   时间复杂度：O(N)，其中 N 为数组的长度。
   空间复杂度：O(N)，其中 N 为数组的长度。
 
-53.Maximum Subarray
+53.Maximum Subarray(找和最大的子数组)
 Given an integer array nums, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.  
 
 若sum小于0，就说明当前元素加上sum只会更小，所以此时sum=nums[i]，否则max+=nums[i]。（动态规划Kadane’s Algorithm）
 
-1.Two Sum
+1.Two Sum(无序数组寻找两个数的和为指定数值的组合)
 Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
 
+用哈希表，对数组每个元素做差，看差值是否已经存在表内。
+
+88. Merge Sorted Array(合并两个有序数组)
+You are given two integer arrays nums1 and nums2, sorted in non-decreasing order, and two integers m and n, representing the number of elements in nums1 and nums2 respectively.
+Merge nums1 and nums2 into a single array sorted in non-decreasing order.
+The final sorted array should not be returned by the function, but instead be stored inside the array nums1. To accommodate this, nums1 has a length of m + n, where the first m elements denote the elements that should be merged, and the last n elements are set to 0 and should be ignored. nums2 has a length of n.
+
+简洁写法：a[m + n - 1] = (m > 0 && a[m - 1] > b[n - 1])? a[--m] : b[--n];
+
+350. Intersection of Two Arrays II(找两数组重叠的部分)
+Given two integer arrays nums1 and nums2, return an array of their intersection. Each element in the result must appear as many times as it shows in both arrays and you may return the result in any order.
+
+哈希表：数组一加入哈希表，重复则自增，数组二查找哈希表，查找成功则自减；
+排序和双指针。
+
+121. Best Time to Buy and Sell Stock(低买高抛)
+You are given an array prices where prices[i] is the price of a given stock on the ith day.
+You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
+Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.
+
+遍历：记录最低买入价格，记录当前卖出的利益，不断更新最大卖出利益。
 ----------------------------------------------------------------------------------------------------------------------------------------
 ## Programming Skills
 1523. Count Odd Numbers in an Interval Range(计算区间内的奇数个数)
