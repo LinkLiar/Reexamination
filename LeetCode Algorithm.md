@@ -114,6 +114,54 @@ Populate each next pointer to point to its next right node. If there is no next 
 Given an m x n binary matrix mat, return the distance of the nearest 0 for each cell.
 
 方法1：用广度优先算法，将0元素的坐标收集起来，将0元素上下左右位置中未标记的位置用该元素的值+1作为替代，并压出队列中。
+
+36. Valid Sudoku(判断是否是一个有效数独)
+Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules:
+Each row must contain the digits 1-9 without repetition.
+Each column must contain the digits 1-9 without repetition.
+Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.
+
+三个判断条件：每行，每列，每块。used1 used2 used3 都为九行九列。
+至于每行和每列，则是用数组判断，有则置为1。
+至于每块，则用k = i / 3 * 3 + j / 3去计算每个位置的索引。
+
+74. Search a 2D Matrix(有序矩阵效率查找数)
+Write an efficient algorithm that searches for a value target in an m x n integer matrix matrix. This matrix has the following properties:
+Integers in each row are sorted from left to right.
+The first integer of each row is greater than the last integer of the previous row.
+
+把矩阵看作为一维数组，用二分查找法。行号为取余，列号为取模。
+
+387. First Unique Character in a String(寻找字符串第一个不重复出现的字符位置)
+Given a string s, find the first non-repeating character in it and return its index. If it does not exist, return -1.
+
+第一遍统计，第二遍找只出现一次的字符。
+
+383. Ransom Note(看一个字符串是否被包含于另一字符串)
+Given two strings ransomNote and magazine, return true if ransomNote can be constructed from magazine and false otherwise.
+Each letter in magazine can only be used once in ransomNote.
+
+哈希表magazine用来 +1，ransomNote用来 -1.
+
+242. Valid Anagram(给定两个字符串，判断是否互为排序组合字符串)
+Given two strings s and t, return true if t is an anagram of s, and false otherwise.
+An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
+
+哈希表：加减，最终为0
+<Algorithm>:排序，判相等
+
+141. Linked List Cycle(判断链表是否有环)
+Given head, the head of a linked list, determine if the linked list has a cycle in it.
+There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the next pointer. Internally, pos is used to denote the index of the node that tail's next pointer is connected to.
+
+快慢指针
+
+21. Merge Two Sorted Lists(合并两个有序链表)
+You are given the heads of two sorted linked lists list1 and list2.
+Merge the two lists in a one sorted list. The list should be made by splicing together the nodes of the first two lists.
+Return the head of the merged linked list.
+
+
 --------------------------------------------------------------------------------------------------------------------------------------------
 ## Algorithm
 217.Contains Duplicate(找重复的数)
@@ -155,6 +203,19 @@ You want to maximize your profit by choosing a single day to buy one stock and c
 Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.
 
 遍历：记录最低买入价格，记录当前卖出的利益，不断更新最大卖出利益。
+
+566. Reshape the Matrix(重整矩形)
+In MATLAB, there is a handy function called reshape which can reshape an m x n matrix into a new one with a different size r x c keeping its original data.
+You are given an m x n matrix mat and two integers r and c representing the number of rows and the number of columns of the wanted reshaped matrix.
+The reshaped matrix should be filled with all the elements of the original matrix in the same row-traversing order as they were.
+If the reshape operation with given parameters is possible and legal, output the new reshaped matrix; Otherwise, output the original matrix.
+
+遍历至总数：取余，取模！result[i / c][i % c] = mat[i / n][i % n];
+
+118. Pascal's Triangle
+Given an integer numRows, return the first numRows of Pascal's triangle.
+
+杨辉三角：初始化i+1个全1，从下标为1至下标i-1，开始赋值，上一行[i] + 上一行[i-1]。
 ----------------------------------------------------------------------------------------------------------------------------------------
 ## Programming Skills
 1523. Count Odd Numbers in an Interval Range(计算区间内的奇数个数)
