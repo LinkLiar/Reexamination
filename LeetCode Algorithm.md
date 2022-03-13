@@ -248,6 +248,13 @@ Given the root of a binary tree and an integer targetSum, return true if the tre
 226. Invert Binary Tree
 Given the root of a binary tree, invert the tree, and return its root.
 
+
+235. Lowest Common Ancestor of a Binary Search Tree
+Given a binary search tree (BST), find the lowest common ancestor (LCA) of two given nodes in the BST.
+According to the definition of LCA on Wikipedia: “The lowest common ancestor is defined between two nodes p and q as the lowest node in T that has both p and q as descendants (where we allow a node to be a descendant of itself).”
+
+
+
 --------------------------------------------------------------------------------------------------------------------------------------------
 ## Algorithm
 217.Contains Duplicate(找重复的数)
@@ -302,6 +309,21 @@ If the reshape operation with given parameters is possible and legal, output the
 Given an integer numRows, return the first numRows of Pascal's triangle.
 
 杨辉三角：初始化i+1个全1，从下标为1至下标i-1，开始赋值，上一行[i] + 上一行[i-1]。
+
+
+994. Rotting Oranges(多少次腐烂扩散全部橙子腐烂)
+You are given an m x n grid where each cell can have one of three values:
+0 representing an empty cell,
+1 representing a fresh orange, or
+2 representing a rotten orange.
+Every minute, any fresh orange that is 4-directionally adjacent to a rotten orange becomes rotten.
+Return the minimum number of minutes that must elapse until no cell has a fresh orange. If this is impossible, return -1.
+
+77. Combinations(找出区间内所有的k个元素的组合)
+Given two integers n and k, return all possible combinations of k numbers out of the range [1, n].
+
+https://leetcode.com/problems/combinations/discuss/26992/Short-Iterative-C%2B%2B-Answer-8ms
+
 ----------------------------------------------------------------------------------------------------------------------------------------
 ## Programming Skills
 1523. Count Odd Numbers in an Interval Range(计算区间内的奇数个数)
