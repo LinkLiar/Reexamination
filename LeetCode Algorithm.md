@@ -162,6 +162,92 @@ Merge the two lists in a one sorted list. The list should be made by splicing to
 Return the head of the merged linked list.
 
 谁小，谁next，剩下的全接入。
+
+203. Remove Linked List Elements(删除链表上值为固定的结点)
+Given the head of a linked list and an integer val, remove all the nodes of the linked list that has Node.val == val, and return the new head.
+
+遍历删除结点，记得防止内存泄露。
+
+206. Reverse Linked List(翻转链表)
+Given the head of a singly linked list, reverse the list, and return the reversed list.
+
+头插法或双指针遍历
+
+83. Remove Duplicates from Sorted List(删除有序链表重复出现元素)
+Given the head of a sorted linked list, delete all duplicates such that each element appears only once. Return the linked list sorted as well.
+
+遍历删除结点，记得防止内存泄露。
+
+20. Valid Parentheses
+Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+An input string is valid if:
+Open brackets must be closed by the same type of brackets.
+Open brackets must be closed in the correct order.
+
+栈入栈出。
+
+232. Implement Queue using Stacks(用栈来实施队列)
+Implement a first in first out (FIFO) queue using only two stacks. The implemented queue should support all the functions of a normal queue (push, peek, pop, and empty).
+Implement the MyQueue class:
+void push(int x) Pushes element x to the back of the queue.
+int pop() Removes the element from the front of the queue and returns it.
+int peek() Returns the element at the front of the queue.
+boolean empty() Returns true if the queue is empty, false otherwise.
+
+两个栈：input栈和output栈，
+队列出队是，判断output栈是否为空，如果为空，则将input栈全部出栈后立刻压入output栈，反之则直接取output栈顶。
+
+144. Binary Tree Preorder Traversal(求树的先序序列)
+Given the root of a binary tree, return the preorder traversal of its nodes' values.
+
+1.Iterative solution using stack --- O(n) time and O(n) space;
+2.Recursive solution --- O(n) time and O(n) space (function call stack);
+3.Morris traversal --- O(n) time and O(1) space.
+https://leetcode.com/problems/binary-tree-preorder-traversal/discuss/45466/C%2B%2B-Iterative-Recursive-and-Morris-Traversal
+
+94. Binary Tree Inorder Traversal(求树的中序序列)
+Given the root of a binary tree, return the inorder traversal of its nodes' values.+
+
+Iterative solution using stack: O(n) time and O(n) space;
+Recursive solution: O(n) time and O(n) space (function call stack);
+Morris traversal: O(n) time and O(1) space.
+https://leetcode.com/problems/binary-tree-inorder-traversal/discuss/31231/C%2B%2B-Iterative-Recursive-and-Morris
+
+145. Binary Tree Postorder Traversal(求树的后序序列)
+Given the root of a binary tree, return the postorder traversal of its nodes' values.
+
+Iterative solution using stack --- O(n) time and O(n) space;
+Recursive solution --- O(n) time and O(n) space (function call stack);
+Morris traversal --- O(n) time and O(1) space.
+https://leetcode.com/problems/binary-tree-postorder-traversal/discuss/45550/C%2B%2B-Iterative-Recursive-and-Morris-Traversal
+
+102. Binary Tree Level Order Traversal(求树的层序序列)
+Given the root of a binary tree, return the level order traversal of its nodes' values. (i.e., from left to right, level by level).
+
+辅助队列，while循环内for循环当前队列内的元素。
+
+104. Maximum Depth of Binary Tree(求树的最大深度)
+Given the root of a binary tree, return its maximum depth.
+A binary tree's maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
+
+DFS：递归，递归左，递归右，然后返回左右最大深度 + 1
+
+101. Symmetric Tree(判断树是否对称)
+Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).
+
+701. Insert into a Binary Search Tree
+You are given the root node of a binary search tree (BST) and a value to insert into the tree. Return the root node of the BST after the insertion. It is guaranteed that the new value does not exist in the original BST.
+
+700. Search in a Binary Search Tree
+You are given the root of a binary search tree (BST) and an integer val.
+Find the node in the BST that the node's value equals val and return the subtree rooted with that node. If such a node does not exist, return null.
+
+112. Path Sum
+Given the root of a binary tree and an integer targetSum, return true if the tree has a root-to-leaf path such that adding up all the values along the path equals targetSum.
+
+226. Invert Binary Tree
+Given the root of a binary tree, invert the tree, and return its root.
+
 --------------------------------------------------------------------------------------------------------------------------------------------
 ## Algorithm
 217.Contains Duplicate(找重复的数)
@@ -184,7 +270,7 @@ Given an array of integers nums and an integer target, return indices of the two
 
 用哈希表，对数组每个元素做差，看差值是否已经存在表内。
 
-88. Merge Sorted Array(合并两个有序数组)
+1.  Merge Sorted Array(合并两个有序数组)
 You are given two integer arrays nums1 and nums2, sorted in non-decreasing order, and two integers m and n, representing the number of elements in nums1 and nums2 respectively.
 Merge nums1 and nums2 into a single array sorted in non-decreasing order.
 The final sorted array should not be returned by the function, but instead be stored inside the array nums1. To accommodate this, nums1 has a length of m + n, where the first m elements denote the elements that should be merged, and the last n elements are set to 0 and should be ignored. nums2 has a length of n.
