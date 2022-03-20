@@ -1,6 +1,8 @@
-卷积：
+图像处理三大级数：直方图(概率)，金字塔(同张图片不同分辨率子图的集合)，卷积()
 
-
+卷积：延迟 倍率 叠加
+作用：提取特征，且减少了参数
+ 
 普通卷积：
 卷积核的通道数 = 输入特征矩阵的通道数
 输出矩阵的通道数 = 卷积核的个数
@@ -19,3 +21,8 @@ PW卷积：
 超参数:
 α = Width Multiplier 
 β = Resolution Multiplier
+
+Few-shot learning is a kind of meta learing
+小样本学习目标不是学习训练集里的图片，并泛化到测试集。
+理解判断事物的异同，不是分辨没见过的事物。
+support set ≠ training set
