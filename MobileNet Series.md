@@ -26,3 +26,12 @@ Few-shot learning is a kind of meta learing
 小样本学习目标不是学习训练集里的图片，并泛化到测试集。
 理解判断事物的异同，不是分辨没见过的事物。
 support set ≠ training set
+Test samples are never seen before.
+Test samples are from known classes.
+
+Query samples are never seen before.
+Query samples are from unknown classes.
+k-way:the support set has k classes.
+n-shot:every class has n samples.
+
+Learn a similarity function:sim(x,x')

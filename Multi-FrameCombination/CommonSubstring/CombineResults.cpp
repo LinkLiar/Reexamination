@@ -24,21 +24,21 @@ vector<pair<int, int> > CombineTextResults::GetIntersectionOfMatrix(const string
 		}
 	}
 
-	//cout << "   ";
-	//for (int j = 0; j < length1; j++)
-	//{
-	//	cout << setw(3) << setiosflags(ios::left) << str1[j];
-	//}
-	//cout << "\n";
-	//for (int i = 0; i < length2; i++)
-	//{
-	//	cout << setw(3) << setiosflags(ios::left) << str2[i];
-	//	for (int j = 0; j < length1; j++)
-	//	{
-	//		cout << setw(3) << setiosflags(ios::left) << dp[i][j];
-	//	}
-	//	cout << "\n";
-	//}
+	cout << "   ";
+	for (int j = 0; j < length1; j++)
+	{
+		cout << setw(3) << setiosflags(ios::left) << str1[j];
+	}
+	cout << "\n";
+	for (int i = 0; i < length2; i++)
+	{
+		cout << setw(3) << setiosflags(ios::left) << str2[i];
+		for (int j = 0; j < length1; j++)
+		{
+			cout << setw(3) << setiosflags(ios::left) << dp[i][j];
+		}
+		cout << "\n";
+	}
 
 	int rows = brPoint.first + 1;
 	int cols = brPoint.second + 1;
@@ -337,6 +337,88 @@ vector<pair<int, int> > CombineTextResults::GetIntersectionOfMatrix(const string
 		}
 	}
 	return result;
+}
+
+pair<vector<vector<int>>, vector<vector<int>>> CombineTextResults::GetStickyPositions(const string str1, const string str2, pair<int, int> tlPoint, pair<int, int> brPoint)
+{
+	vector<pair<int, vector<pair<int, string> > > >mainOdds(str1.size() + 1, make_pair(1, vector<pair<int, string> >()));
+	vector<pair<int, vector<pair<int, string> > > >tempOdds(str2.size() + 1, make_pair(1, vector<pair<int, string> >()));
+	vector<pair<int, int> >result = GetIntersectionOfMatrix(str1, str2, make_pair(0, 0), make_pair(str2.size() - 1, str1.size() - 1), mainOdds, tempOdds);
+	if (result.size() < min(str1.size(), str2.size()) / 3)
+		return {};
+	pair<vector<vector<int>>, vector<vector<int>>>positions;
+	for (int i = 0; i < static_cast<int>(result.size()); i++)
+	{
+		vector<int>str1Positions;
+		vector<int>str2Positions;
+		if (i == 0)
+		{
+			if (result[i].first != 0 || result[i].second != 0)
+			{
+				for (int str1Num = 0; str1Num < result[i].second; str1Num++)
+				{
+					str1Positions.push_back(str1Num);
+				}
+				for (int str2Num = 0; str2Num < result[i].first; str2Num++)
+				{
+					str2Positions.push_back(str2Num);
+				}
+				if (str1Positions.empty() || str2Positions.empty())
+				{
+					str1Positions.push_back(result[i].second);
+					str2Positions.push_back(result[i].first);
+				}
+				positions.first.push_back(str1Positions);
+				positions.second.push_back(str2Positions);
+			}
+		}
+		else if (i == result.size() - 1)
+		{
+			if (result[i].first != str2.size()-1 || result[i].second != str1.size()-1)
+			{
+				for (int str1Num = result[i].second; str1Num < str1.size()-1; str1Num++)
+				{
+					str1Positions.push_back(str1Num);
+				}
+				for (int str2Num = result[i].first; str2Num < str2.size()-1; str2Num++)
+				{
+					str2Positions.push_back(str2Num);
+				}
+				if (str1Positions.empty() || str2Positions.empty())
+				{
+					str1Positions.push_back(result[i].second);
+					str2Positions.push_back(result[i].first);
+				}
+				positions.first.push_back(str1Positions);
+				positions.second.push_back(str2Positions);
+			}
+		}
+		else
+		{
+			if (result[i].first - result[i - 1].first != result[i].second - result[i - 1].second)
+			{
+				for (int str1Num = result[i - 1].second + 1; str1Num < result[i].second; str1Num++)
+				{
+					str1Positions.push_back(str1Num);
+				}
+				for (int str2Num = result[i - 1].first + 1; str2Num < result[i].first; str2Num++)
+				{
+					str2Positions.push_back(str2Num);
+				}
+				if (str1Positions.empty() || str2Positions.empty())
+				{
+					str1Positions.insert(str1Positions.begin(), result[i - 1].second);
+					str1Positions.push_back(result[i].second);
+					str2Positions.insert(str2Positions.begin(), result[i - 1].first);
+					str2Positions.push_back(result[i].first);
+				}
+				positions.first.push_back(str1Positions);
+				positions.second.push_back(str2Positions);
+			}
+		}
+	}
+
+	return positions;
 }
 
 MergeFrameResult CombineTextResults::GetUnionOfStrings(MergeFrameResult mergedResult1, MergeFrameResult mergedResult2)

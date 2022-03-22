@@ -20,6 +20,7 @@ public:
 	~CombineTextResults();
 	void CombineString(const string inputStr, int& iScore);
 	string m_combineResult;
+	pair<vector<vector<int>>, vector<vector<int>>> GetStickyPositions(const string str1, const string str2, pair<int, int> tlPoint, pair<int, int> brPoint);
 
 private:
 	int m_queueSize = 0;
