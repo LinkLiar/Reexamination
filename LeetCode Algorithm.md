@@ -22,7 +22,7 @@ Given an integer array nums sorted in non-decreasing order, return an array of t
 Given an array, rotate the array to the right by k steps, where k is non-negative.
 
 方法：
-1.拷贝数据，答案的第(i + k)%n个格子 放入 源数据第i个数据TimeC: O(n). SpaceC: O(n).
+1.拷贝数据，答案的第(i + k)%n个格子 放入 源数据第i个数据：TimeC: O(n). SpaceC: O(n).
 2.双指针法：
 https://leetcode.com/problems/rotate-array/discuss/54263/3-lines-of-C%2B%2B-in-one-pass-using-swap
 https://leetcode.com/problems/rotate-array/discuss/54277/Summary-of-C%2B%2B-solutions
@@ -339,3 +339,9 @@ Return the average salary of employees excluding the minimum and maximum salary.
 accumulate(begin(s), end(s), 0.)
 conversion to double (0. - with a dot - as the initial value for accumulate).
 min_element 和 max_element 头文件:#include<algorithm> 作用:返回容器中最小值和最大值的指针。max_element(first,end,cmp);其中cmp为可选择参数
+
+1、算法复杂度与初始状态无关的有：选择排序、堆排序、归并排序、基数排序。
+2、元素总比较次数与初始状态无关的有：选择排序、基数排序。
+3、元素总移动次数与初始状态无关的有：归并排序、基数排序。
+
+稳定性✔：插入，冒泡，归并，基数
