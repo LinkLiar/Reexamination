@@ -16,6 +16,6 @@ https://anl.ink/download/
 
 
 
-SETUNA2
+SETUNA2 ✔
 
 https://github.com/tylearymf/SETUNA2
