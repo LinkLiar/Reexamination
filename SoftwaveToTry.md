@@ -15,7 +15,12 @@ AnLinkSetup.zip
 https://anl.ink/download/
 
 
+Weylus
+
+https://www.appinn.com/weylus/
+
 
 SETUNA2 ✔
 
 https://github.com/tylearymf/SETUNA2
+1
