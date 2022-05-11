@@ -1,6 +1,5 @@
 自组织增量学习神经网络
 
-
 Real-Time Prediction System of Train Carriage Load Based on Multi-Stream Fuzzy Learning
 https://ieeexplore.ieee.org/document/9678130
 
