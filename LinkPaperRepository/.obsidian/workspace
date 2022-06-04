@@ -1,0 +1,103 @@
+{
+  "main": {
+    "id": "17cfebfe01e8fe95",
+    "type": "split",
+    "children": [
+      {
+        "id": "e717ffd1db1727c3",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "MachineLearning/朴素贝叶斯法（Naive Bayes model）.md",
+            "mode": "source",
+            "source": false
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "487c851cde2e210d",
+    "type": "split",
+    "children": [
+      {
+        "id": "801a27ba7e84abc6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "62eb80888e30faee",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "29675bcaddb41b22",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 605
+  },
+  "right": {
+    "id": "20fb5c51f8a8852a",
+    "type": "split",
+    "children": [
+      {
+        "id": "de9c749df037cb94",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "73a2285b1ab298cc",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "MachineLearning/朴素贝叶斯法（Naive Bayes model）.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "e717ffd1db1727c3",
+  "lastOpenFiles": [
+    "MachineLearning/朴素贝叶斯法（Naive Bayes model）.md",
+    "MachineLearning/感知机（Perceptron）.md",
+    "Picture/Pasted image 20220603163830.png",
+    "Picture/Pasted image 20220604133147.png",
+    "Picture/Pasted image 20220604132750.png",
+    "Picture/Pasted image 20220603163852.png",
+    "Papers/Very fast decision rules for classification in data streams-1312.md",
+    "Picture/Pasted image 20220604114500.png",
+    "面向大数据的数据处理与分析算法综述-周宇-2110.pdf",
+    "Papers/面向大数据的数据处理与分析算法综述-周宇-2110.md"
+  ]
+}
